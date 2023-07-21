@@ -1,0 +1,649 @@
+                   {/* here active that came  */}
+{activeScreen === "new" && (
+                    <>
+                      {getRoomResponse?.chat_data?.length > 0 ? (
+                        getRoomResponse?.chat_data?.map((val, index) => {
+                          // const response ={valquestion}
+                          const response = val?.answer;
+                          console.log("response123", response);
+
+                          const regex = /```[\s\S]*?```/g;
+                          const codeBlocks = response.match(regex);
+                          const extractedCodeBlocks = codeBlocks?.map(
+                            (codeBlock) => codeBlock.slice(3, -3)
+                          );
+                          const firstWords = extractedCodeBlocks?.map(
+                            (codeBlock) => {
+                              const match = codeBlock.match(/^\w+/);
+                              return match ? match[0] : null;
+                            }
+                          );
+                          const modifiedCodeBlocks = extractedCodeBlocks?.map(
+                            (codeBlock, index) => {
+                              const firstWord = firstWords[index];
+                              const modifiedCodeBlock = codeBlock.replace(
+                                new RegExp(`^${firstWord}\\s*`),
+                                ""
+                              );
+                              return modifiedCodeBlock.trim();
+                            }
+                          );
+                          const formattedCodeBlocks = modifiedCodeBlocks?.map(
+                            (codeBlock) => {
+                              const lines = codeBlock.split("\n");
+                              const formattedLines = lines.map((line) =>
+                                line.trim()
+                              );
+                              return formattedLines.join("\n");
+                            }
+                          );
+
+                          const finalCodeBlocks =
+                            formattedCodeBlocks &&
+                            formattedCodeBlocks.join("\n\n");
+                          console.log("modifiedCodeBlocksasd", finalCodeBlocks);
+                          // const finalCodeBlocks1 = finalCodeBlocks;
+                          // -----------------------
+
+                          const handleCopyClick1 = (index) => {
+                            // Create a temporary textarea element to copy the text
+                            const tempTextarea =
+                              document.createElement("textarea");
+                            tempTextarea.value = finalCodeBlocks;
+                            document.body.appendChild(tempTextarea);
+
+                            // Select the text inside the textarea and copy it
+                            tempTextarea.select();
+                            document.execCommand("copy");
+
+                            // Remove the temporary textarea element
+                            document.body.removeChild(tempTextarea);
+
+                            // Set the copied status for the clicked element's index to true
+                            setCopied((prevStatus) => ({
+                              ...prevStatus,
+                              [index]: true,
+                            }));
+
+                            // Reset the copied status to false after 4 seconds
+                            setTimeout(() => {
+                              setCopied((prevStatus) => ({
+                                ...prevStatus,
+                                [index]: false,
+                              }));
+                            }, 4000);
+                          };
+                          // -----------------------
+                          // -----------------------
+                          const regex1 = /([\s\S]*)\n\n```/; // `
+                          // const regex1 = /([\s\S]*)\n\n```/;
+
+                          const match = val?.answer?.match(regex1);
+                          const textBeforeCode = match
+                            ? `\n\n${match[1]}`
+                            : val?.answer;
+
+                          // -----------------------
+                          const regex2 = /```\n\n([\s\S]*)$/;
+                          // const regex2 = /```([\s\S]*)\n\n([\s\S]*)```/; // Regular expression to capture text after ``` code block
+
+                          const matcha = val?.answer?.match(regex2);
+                          const textAfterCode1 = matcha
+                            ? `\n\n${matcha[1]}`
+                            : "";
+                          // -----------------------
+                          console.log("modifiedCodeBlocks", modifiedCodeBlocks);
+
+                          console.log("firstWords", firstWords);
+                          console.log(
+                            "extractedCodeBlocks",
+                            extractedCodeBlocks
+                          );
+                          return (
+                            <>
+                              <div
+                                // className="r21"
+                                className={
+                                  isLightTheme ? "r21 light " : "r21 dark  "
+                                }>
+                                <div
+                                  //  className="r22"
+                                  className={
+                                    isLightTheme ? "r22 light " : "r22 dark  "
+                                  }>
+                                  <img
+                                    className="r22a"
+                                    src={logomain2}
+                                    alt=""
+                                  />
+                                </div>
+                                <div
+                                  // className="r23"
+                                  className={
+                                    isLightTheme ? "r23 light " : "r23"
+                                  }>
+                                  {/* Hello , How are you ! */}
+                                  {val?.question}
+                                </div>
+                                <div
+                                  onClick={() => {
+                                    setValue(val?.question);
+                                    setisUpdateClicked(true);
+                                    setUpdateApiId(val?._id);
+                                    handleL2ClickText();
+                                  }}
+                                  //  className="r24"
+                                  className={
+                                    isLightTheme ? "r24 light " : "r24"
+                                  }>
+                                  <BiMessageSquareEdit />
+                                </div>
+                              </div>{" "}
+                              {/* ------------------------------- */}
+                              <div
+                                //  className="r21answer"
+                                className={
+                                  isLightTheme
+                                    ? "r21answer light "
+                                    : "r21answer"
+                                }>
+                                <div
+                                  // className="r22"
+                                  className={
+                                    isLightTheme ? "r22 light " : "r22 dark  "
+                                  }>
+                                  <img
+                                    className="r22a"
+                                    src={logomain2}
+                                    alt=""
+                                  />
+                                </div>
+                                <div
+                                  // className="r23"
+                                  className={
+                                    isLightTheme ? "r23 light " : "r23 dark"
+                                  }>
+                                  {/* Lorem Ipsum is simply dummy text of the printing and
+                          typesetting industry. Lorem Ipsum has been the
+                          industry's standard dummy text ever since the 1500s,
+                          when an unknown printer took a galley of type and
+                          scrambled it to make a type specimen book. It has
+                          survived not only five centuries, but also the leap
+                          into electronic typesetting, remaining essentially
+                          unchanged. It was popularised in the 1960s with the
+                          release of Letraset sheets containing Lorem Ipsum
+                          passages,and more recently with desktop publishing
+                          software like Aldus PageMaker including versions of
+                          Lorem Ipsum. */}
+                                  <div className="r34a1">
+                                    <code
+                                      //  className="cod1"
+                                      className={
+                                        isLightTheme ? "cod1  " : "cod1 dark "
+                                      }>
+                                      {textBeforeCode}
+                                    </code>
+                                  </div>
+                                  {finalCodeBlocks ? null : <></>}
+                                  {finalCodeBlocks && (
+                                    <div
+                                      //  className="r30"
+                                      className={
+                                        isLightTheme
+                                          ? "r30 light "
+                                          : "r30 dark  "
+                                      }>
+                                      {" "}
+                                      <div
+                                        //  className="r31"
+                                        className={
+                                          isLightTheme
+                                            ? "r31 light "
+                                            : "r31 dark  "
+                                        }>
+                                        <div className="r32">
+                                          {/* React Js */}
+                                          {firstWords}
+                                        </div>
+                                        {/* <div className="r33"> Copy</div> */}
+                                        <div
+                                          className="r33"
+                                          onClick={() => {
+                                            // setTextToCopy(finalCodeBlocks);
+                                            handleCopyClick1(index);
+                                          }}>
+                                          {copied[index] ? "Copied" : "Copy"}
+                                        </div>
+                                      </div>{" "}
+                                      <div className="r34">
+                                        <div
+                                          className="r34a"
+                                          // dangerouslySetInnerHTML={{
+                                          // __html: finalCodeBlocks,
+                                          // }}
+                                        >
+                                          <SyntaxHighlighter
+                                            language={
+                                              firstWords && firstWords[index]
+                                            }
+                                            // language={React}
+                                            // language="react"
+                                            style={vs2015}
+                                            //   language={firstWords[index]}
+                                            // style={vs}
+                                          >
+                                            {/* <code> */}
+                                            {finalCodeBlocks}
+                                            {/* </code> */}
+                                          </SyntaxHighlighter>
+                                          {/* <code>{finalCodeBlocks}</code> */}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Contrary to popular belief, Lorem Ipsum is not
+                          simply random text. It has roots in a piece of
+                          classical Latin literature from 45 BC, making it
+                          over 2000 years old.Richard McClintock, a Latin
+                          professor at Hampden-Sydney College in Virginia,
+                          looked up one of the more obscure Latin words,
+                          consectetur. */}
+                                  <div className="r34a1">
+                                    <code
+                                      //  className="cod1"
+                                      className={
+                                        isLightTheme ? "cod1  " : "cod1 dark "
+                                      }>
+                                      {textAfterCode1}
+                                    </code>
+                                  </div>
+                                </div>
+                                <div
+                                  //  className="r24answer"
+                                  className={
+                                    isLightTheme
+                                      ? "r24answer light "
+                                      : "r24answer "
+                                  }>
+                                  <div
+                                    // className="r24"
+                                    className={
+                                      isLightTheme ? "r24  light " : "r24  "
+                                    }>
+                                    <AiOutlineLike />
+                                  </div>{" "}
+                                  <div
+                                    //  className="r24"
+                                    className={
+                                      isLightTheme ? "r24  light " : "r24  "
+                                    }>
+                                    <AiOutlineDislike />
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          );
+                        })
+                      ) : (
+                        <div className="a4">
+                          <img src={newchat} alt="new chat" />
+                        </div>
+                      )}
+                    </>
+                  )}
+
+ {activeScreen === "history" && (
+                    <>
+                      {getRoomResponse?.chat_data?.map((val, index) => {
+                        // const response ={valquestion}
+                        const response = val?.answer;
+                        console.log("response123", response);
+
+                        const regex = /```[\s\S]*?```/g;
+                        const codeBlocks = response.match(regex);
+                        const extractedCodeBlocks = codeBlocks?.map(
+                          (codeBlock) => codeBlock.slice(3, -3)
+                        );
+                        const firstWords = extractedCodeBlocks?.map(
+                          (codeBlock) => {
+                            const match = codeBlock.match(/^\w+/);
+                            return match ? match[0] : null;
+                          }
+                        );
+                        const modifiedCodeBlocks = extractedCodeBlocks?.map(
+                          (codeBlock, index) => {
+                            const firstWord = firstWords[index];
+                            const modifiedCodeBlock = codeBlock.replace(
+                              new RegExp(`^${firstWord}\\s*`),
+                              ""
+                            );
+                            return modifiedCodeBlock.trim();
+                          }
+                        );
+
+                        const formattedCodeBlocks = modifiedCodeBlocks?.map(
+                          (codeBlock) => {
+                            const lines = codeBlock.split("\n");
+                            const formattedLines = lines.map((line) =>
+                              line.trim()
+                            );
+                            return formattedLines.join("\n");
+                          }
+                        );
+
+                        const finalCodeBlocks =
+                          formattedCodeBlocks &&
+                          formattedCodeBlocks.join("\n\n");
+                        console.log("modifiedCodeBlocksasd", finalCodeBlocks);
+                        // const finalCodeBlocks1 = finalCodeBlocks;
+
+                        const regex1 = /([\s\S]*)```/; // `
+                        // const regex1 = /([\s\S]*)\n\n```/;
+
+                        const match = val?.answer.match(regex1);
+                        const textBeforeCode = match ? `\n\n${match[1]}` : "";
+                        console.log("val?.answerval", textBeforeCode);
+
+                        // console.log("val?.answerval", val?.answer);
+                        // const textBeforeCode = val?.answer;
+                        // -----------------------
+                        const regex2 = /```\n\n([\s\S]*)$/;
+                        // const regex2 = /```([\s\S]*)\n\n([\s\S]*)```/; // Regular expression to capture text after ``` code block
+
+                        const matcha = val?.answer?.match(regex2);
+                        const textAfterCode1 = matcha
+                          ? `\n\n${matcha[1]}`
+                          : val?.answer;
+                        console.log("textAfterCode1a", textAfterCode1);
+                        // -----------------------
+                        console.log("modifiedCodeBlocks", finalCodeBlocks);
+
+                        console.log("firstWords", firstWords);
+                        console.log("extractedCodeBlocks", extractedCodeBlocks);
+                        // -----------------------
+
+                        const handleCopyClick = (index) => {
+                          // Create a temporary textarea element to copy the text
+                          const tempTextarea =
+                            document.createElement("textarea");
+                          tempTextarea.value = finalCodeBlocks;
+                          document.body.appendChild(tempTextarea);
+
+                          // Select the text inside the textarea and copy it
+                          tempTextarea.select();
+                          document.execCommand("copy");
+
+                          // Remove the temporary textarea element
+                          document.body.removeChild(tempTextarea);
+
+                          // Set the copied status for the clicked element's index to true
+                          setCopied((prevStatus) => ({
+                            ...prevStatus,
+                            [index]: true,
+                          }));
+
+                          // Reset the copied status to false after 4 seconds
+                          setTimeout(() => {
+                            setCopied((prevStatus) => ({
+                              ...prevStatus,
+                              [index]: false,
+                            }));
+                          }, 4000);
+                        };
+                        // -----------------------
+                        return (
+                          <>
+                            <div
+                              // className="r21"
+                              className={
+                                isLightTheme ? "r21 light " : "r21 dark  "
+                              }>
+                              <div
+                                //  className="r22"
+                                className={
+                                  isLightTheme ? "r22 light " : "r22 dark  "
+                                }>
+                                {getRoomResponse?.user_data?.map((abc) => {
+                                  return (
+                                    <>
+                                      <img
+                                        className="r22ab"
+                                        src={abc?.profileImage}
+                                        alt=""
+                                      />
+                                    </>
+                                  );
+                                })}
+                              </div>
+                              {/* <div
+                                className={isLightTheme ? "r23 light " : "r23"}>
+                                {val?.question}
+                              </div> */}
+                              {EditActive ? (
+                                <>
+                                  {" "}
+                                  <div
+                                    className={
+                                      isLightTheme ? "r23 light " : "r23"
+                                    }>
+                                    {val?.question}
+                                    {/* <code> */}
+                                    {/* <input
+                                      placeholder={val?.question}
+                                      type="text"
+                                      value={QTitle}
+                                      onChange={handleOnChangeQuestion}
+                                      className="inputUpdate1"
+                                    /> */}
+                                    {/* <textarea
+                                      // rows={6}
+                                      placeholder={val?.question}
+                                      type="text"
+                                      value={QTitle}
+                                      onChange={handleOnChangeQuestion}
+                                      className="inputUpdate1"></textarea> */}
+                                    {/* <textarea
+                                      ref={textareaRef}
+                                      placeholder={val?.question}
+                                      value={QTitle}
+                                      onChange={handleOnChangeQuestion}
+                                      onInput={(event) =>
+                                        adjustHeight(event.target)
+                                      }
+                                      // className={`custom-input ${
+                                      //   containerActive ? "active" : ""
+                                      // }`}
+                                      className={
+                                        isLightTheme
+                                          ? `custom-inputa1 ${
+                                              containerActive ? "active" : ""
+                                            }`
+                                          : `custom-input ${
+                                              containerActive ? "active" : ""
+                                            }`
+                                      }
+                                    /> */}
+                                    {/* </code> */}
+                                  </div>
+                                  <div
+                                    onClick={() => {
+                                      setEditActive(true);
+                                      // setQTitle(val?.question);
+                                      setValue(val?.question);
+                                      setUpdateApiId(val?._id);
+                                      setisUpdateClicked(true);
+                                      handleL2ClickText(val?._id);
+                                    }}
+                                    className={
+                                      isLightTheme ? "r24 light " : "r24"
+                                    }>
+                                    <BiMessageSquareEdit />
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  {" "}
+                                  <div
+                                    className={
+                                      isLightTheme ? "r23 light " : "r23"
+                                    }>
+                                    {val?.question}
+                                  </div>
+                                  <div
+                                    onClick={() => {
+                                      setEditActive(true);
+                                      setValue(val?.question);
+                                      setUpdateApiId(val?._id);
+                                      setisUpdateClicked(true);
+                                      handleL2ClickText();
+                                    }}
+                                    className={
+                                      isLightTheme ? "r24 light " : "r24"
+                                    }>
+                                    <BiMessageSquareEdit />
+                                  </div>
+                                </>
+                              )}
+                            </div>{" "}
+                            {/* ------------------------------- */}
+                            <div
+                              //  className="r21answer"
+                              className={
+                                isLightTheme ? "r21answer light " : "r21answer"
+                              }>
+                              <div
+                                // className="r22"
+                                className={
+                                  isLightTheme ? "r22 light " : "r22 dark  "
+                                }>
+                                <img className="r22a" src={logomain2} alt="" />
+                              </div>
+                              <div
+                                // className="r23"
+                                className={
+                                  isLightTheme ? "r23 light " : "r23 dark"
+                                }>
+                                {/* Lorem Ipsum is simply dummy text of the printing and
+                            typesetting industry. Lorem Ipsum has been the
+                            industry's standard dummy text ever since the 1500s,
+                            when an unknown printer took a galley of type and
+                            scrambled it to make a type specimen book. It has
+                            survived not only five centuries, but also the leap
+                            into electronic typesetting, remaining essentially
+                            unchanged. It was popularised in the 1960s with the
+                            release of Letraset sheets containing Lorem Ipsum
+                            passages,and more recently with desktop publishing
+                            software like Aldus PageMaker including versions of
+                            Lorem Ipsum. */}
+                                <div className="r34a1">
+                                  <code
+                                    //  className="cod1"
+                                    className={
+                                      isLightTheme ? "cod1  " : "cod1 dark "
+                                    }>
+                                    {textBeforeCode}
+                                  </code>
+                                </div>
+                                {finalCodeBlocks ? null : <></>}
+                                {finalCodeBlocks && (
+                                  <div
+                                    //  className="r30"
+                                    className={
+                                      isLightTheme ? "r30 light " : "r30 dark  "
+                                    }>
+                                    {" "}
+                                    <div
+                                      //  className="r31"
+                                      className={
+                                        isLightTheme
+                                          ? "r31 light "
+                                          : "r31 dark  "
+                                      }>
+                                      <div className="r32">
+                                        {/* React Js */}
+                                        {firstWords}
+                                      </div>
+                                      {/* <div className="r33"> Copy</div> */}
+
+                                      <div
+                                        className="r33"
+                                        onClick={() => {
+                                          // setTextToCopy(finalCodeBlocks);
+                                          handleCopyClick(index);
+                                        }}>
+                                        {copied[index] ? "Copied" : "Copy"}
+                                      </div>
+                                    </div>{" "}
+                                    <div className="r34">
+                                      <div
+                                        className="r34a"
+                                        // dangerouslySetInnerHTML={{
+                                        // __html: finalCodeBlocks,
+                                        // }}
+                                      >
+                                        <SyntaxHighlighter
+                                          language={
+                                            firstWords && firstWords[index]
+                                          }
+                                          // language={React}
+                                          // language="react"
+                                          style={vs2015}
+                                          //   language={firstWords[index]}
+                                          // style={vs}
+                                        >
+                                          {/* <code> */}
+                                          {finalCodeBlocks}
+                                          {/* </code> */}
+                                        </SyntaxHighlighter>
+                                        {/* <code>{finalCodeBlocks}</code> */}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Contrary to popular belief, Lorem Ipsum is not
+                            simply random text. It has roots in a piece of
+                            classical Latin literature from 45 BC, making it
+                            over 2000 years old.Richard McClintock, a Latin
+                            professor at Hampden-Sydney College in Virginia,
+                            looked up one of the more obscure Latin words,
+                            consectetur. */}
+                                <div className="r34a1">
+                                  <code
+                                    //  className="cod1"
+                                    className={
+                                      isLightTheme ? "cod1  " : "cod1 dark "
+                                    }>
+                                    {textAfterCode1}
+                                  </code>
+                                </div>
+                              </div>
+                              <div
+                                //  className="r24answer"
+                                className={
+                                  isLightTheme
+                                    ? "r24answer light "
+                                    : "r24answer "
+                                }>
+                                <div
+                                  // className="r24"
+                                  className={
+                                    isLightTheme ? "r24  light " : "r24  "
+                                  }>
+                                  <AiOutlineLike />
+                                </div>{" "}
+                                <div
+                                  //  className="r24"
+                                  className={
+                                    isLightTheme ? "r24  light " : "r24  "
+                                  }>
+                                  <AiOutlineDislike />
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        );
+                      })}
+                    </>
+                  )}
