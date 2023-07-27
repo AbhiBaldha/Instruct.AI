@@ -12,11 +12,14 @@ import logo8 from "../Image/11.webm";
 import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import Main from "../Main.jsx/Main";
-import { Form, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { type } from "@testing-library/user-event/dist/type";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Col, Container, Row } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -37,7 +40,25 @@ function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const passwordPattern = /^(?=.*[!@#$%^&*])(?=.*[A-Z]).{8,}$/;
   const [loading, setLoading] = useState(false);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // ======================
 
+  const handleEmailChange = (e) => {
+    const emailValue = e.target.value;
+    // setEmail(emailValue);
+
+    setEmail(e.target.value);
+    // setEmailError("");
+
+    // Regular expression to validate the email format
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(emailValue)) {
+    //   toast.error("Please enter a valid email address.");
+    //   // setEmailError("Please enter a valid email address.");
+    // }
+  };
+
+  // ======================
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
     // setShowPassword(false);
@@ -57,7 +78,7 @@ function SignUp() {
     }, 1000);
   };
   const handleSubmit = (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     setLoading(true);
     // Clear previous error message
     setErrorMessage("");
@@ -67,6 +88,7 @@ function SignUp() {
     // Check if any field is empty
     if (!email || !userName || !password || !confirmPassword) {
       setErrorMessage("Please fill out all fields.");
+      toast.error("Please fill out the fields.");
       return setLoading(false);
     }
     if (!passwordPattern.test(password)) {
@@ -98,108 +120,127 @@ function SignUp() {
       return setLoading(false);
     }
 
-    axios
-      .post("http://localhost:80/auth/signUp", {
-        email,
-        userName,
-        password,
-        userType: "0",
-        // confirmPassword,
-      })
-      .then((response) => {
-        setLoading(false);
-        toast.success("Otp Sent Successfully!");
-        toggleSignup29();
-        // toggleSignup25();
-        console.log("Sign-up successful.");
-      })
-      .catch((error) => {
-        setLoading(false);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          // Display the error message from the API response
-          const errorMessage = error.response.data.message;
-          toast.error(errorMessage);
-        } else {
-          // Display a generic error message
-          toast.error("An error occurred. Please try again.");
-        }
-        console.error("Sign-up error:", error);
-        setErrorMessage("Sign-up failed. Please try again.");
-      });
-
-    console.log("Sign-up button clicked. Ready to make API call.");
-    // Submit the form
-    // ...
+    if (emailRegex?.test(email)) {
+      console.log("first email check");
+      // toast.error("Please enter a valid email address.");
+      // setEmailError("Please enter a valid email address.");
+      axios
+        .post("http://localhost:80/auth/signUp", {
+          email,
+          userName,
+          password,
+          userType: "0",
+          // confirmPassword,
+        })
+        .then((response) => {
+          setLoading(false);
+          setEmail("");
+          toast.success("Otp Sent Successfully!");
+          toggleSignup29();
+          // toggleSignup25();
+          console.log("Sign-up successful.");
+        })
+        .catch((error) => {
+          setLoading(false);
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+          ) {
+            // Display the error message from the API response
+            const errorMessage = error.response.data.message;
+            toast.error(errorMessage);
+          } else {
+            // Display a generic error message
+            toast.error("An error occurred. Please try again.");
+          }
+          console.error("Sign-up error:", error);
+          setErrorMessage("Sign-up failed. Please try again.");
+        });
+    } else {
+      toast.error("Please enter a valid email address.");
+      setLoading(false);
+    }
   };
 
   // ------------------------------------
   const handleSignIn = (event) => {
-    event.preventDefault();
-    setLoading(true);
-    if (loading) {
-      return;
-    }
-    setErrorMessage("");
-    setLoading(true);
+    // event?.preventDefault();
+    // setLoading(true);
+    // if (loading) {
+    //   return setLoading(false);
+    // }
+    // setErrorMessage("");
+    // setLoading(true);
 
-    if (loading) {
-      return;
-    }
+    // if (loading) {
+    //   return;
+    // }
+    event?.preventDefault();
+    setLoading(true);
+    // Clear previous error message
+    setErrorMessage("");
+
     if (!email || !password) {
       setErrorMessage("Please fill out all fields.");
       return;
       setLoading(false);
     }
+    if (emailRegex?.test(email)) {
+      axios
+        .post("http://localhost:80/auth/login", {
+          email,
+          password,
+          deviceToken: "test",
+        })
+        .then((response) => {
+          setLoading(false);
+          const token = response?.data?.data?.token;
+          localStorage.setItem(
+            "userInfo",
+            JSON.stringify(response?.data?.data)
+          );
+          localStorage.setItem("token", token);
+          localStorage.getItem("token");
+          if (response && response.data && response.data.message) {
+            // Display the success message from the API response
+            const successMessage = response.data.message;
+            toast.success(successMessage);
+          } else {
+            // Display a generic success message
+            toast.success("Sign-in successful");
+          }
+          toggleSignup26();
+          console.log("Sign-in successful.");
+          // toast.success("Sign-in Succesfully.");
 
-    // Make the API call
-    axios
-      .post("http://localhost:80/auth/login", {
-        email,
-        password,
-        deviceToken: "test",
-      })
-      .then((response) => {
-        setLoading(false);
-        const token = response?.data?.data?.token;
-        localStorage.setItem("userInfo", JSON.stringify(response?.data?.data));
-        localStorage.setItem("token", token);
-        localStorage.getItem("token");
-        if (response && response.data && response.data.message) {
-          // Display the success message from the API response
-          const successMessage = response.data.message;
-          toast.success(successMessage);
-        } else {
-          // Display a generic success message
-          toast.success("Sign-in successful");
-        }
-        toggleSignup26();
-        console.log("Sign-in successful.");
-        // toast.success("Sign-in Succesfully.");
-
-        navigate("/Main");
-      })
-      .catch((error) => {
-        setLoading(false);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          // Display the error message from the API response
-          const errorMessage = error.response.data.message;
-          toast.error(errorMessage);
-        } else {
-          // Display a generic error message
-          toast.error("Sign in failed");
-        }
-        console.error("Sign-up error:", error);
-        setErrorMessage("Sign-up failed. Please try again.");
-      });
+          navigate("/Main");
+        })
+        .catch((error) => {
+          setLoading(false);
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+          ) {
+            // Display the error message from the API response
+            const errorMessage = error.response.data.message;
+            toast.error(errorMessage);
+          } else {
+            // Display a generic error message
+            toast.error("Sign in failed");
+          }
+          console.error("Sign-up error:", error);
+          setErrorMessage("Sign-up failed. Please try again.");
+        });
+    } else {
+      toast.error("Please enter a valid email address.");
+      setLoading(false);
+    }
   };
+
+  // Make the API call
+
   // ===========================================
   const handleSendOTP = (event) => {
     setLoading(true);
@@ -401,9 +442,9 @@ function SignUp() {
     setLoading(true);
 
     e.preventDefault();
-    if (handleResetPassword) {
-      return;
-    }
+    // if (handleResetPassword) {
+    //   return
+    // }
     // Perform form validation
     if (password.trim() === "") {
       console.log("Please enter a password");
@@ -507,6 +548,36 @@ function SignUp() {
       });
   };
   // ======================
+  // const handleEmailChange = (e) => {
+  //   const inputValueAsd = e.target.value;
+  //   console.log("handleemailchange cliekd", inputValueAsd);
+  //   const regex = /@gmail\.com$/;
+
+  //   if (!regex.test(inputValueAsd)) {
+  //     setEmail(inputValueAsd);
+  //   } else {
+  //     console.log("please enter a proper email address");
+  //   }
+  // };
+  // const [emailError, setEmailError] = useState("");
+  // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // const handleEmailChange = (e) => {
+  //   const emailValue = e.target.value;
+  //   // setEmail(emailValue);
+
+  //   setEmail(e.target.value);
+  //   // setEmailError("");
+
+  //   // Regular expression to validate the email format
+  //   // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   // if (!emailRegex.test(emailValue)) {
+  //   //   toast.error("Please enter a valid email address.");
+  //   //   // setEmailError("Please enter a valid email address.");
+  //   // }
+  // };
+
+  // // ======================
 
   const [showSignup25, setShowSignup25] = useState(false);
   const [showSignup12, setShowSignup12] = useState(true);
@@ -590,459 +661,406 @@ function SignUp() {
     setShowSignup12(false);
     setShowSignup26(false);
   };
-  // const mainCall = () => {
-  //   <Main />;
-  // };
+
   const [isplaying, setIsplaying] = useState(true);
-  useEffect(() => {
-    // setIsplaying(true);
-  }, [isplaying]);
-  // console.log("isplaying", isplaying);
+  useEffect(() => {}, [isplaying]);
 
   return (
     <>
-      <div className="Signup1">
-        <div className="Signup2">
-          <div className="Signup4">
-            <img className="Signup5" src={logo} alt="" />
-            <div className="Signup6"></div>
-          </div>
-          <div className="Signup7">
-            {/* ==================== */}
-
-            {/* <video className="Signup9" loop autoPlay={true} muted>
-              <source className="Signup9" src={ai2} type="video/mp4" />
-            </video> */}
-            {/* ==================== */}
-            {/* <video className="Signup9" type="video/mp4" src={ai2}></video> */}
-            {/* <ReactPlayer url={ai2} height="504px" width={504} loop={true} /> */}
-            {/* <video className="Signup9" type="video/mp4" src={ai2}></video> */}
-            {/* <img className="Signup9" src={face} alt="face logo" /> */}
-            {/* <img
-              src={logo8}
-              // src="https://cdn.dribbble.com/users/7379292/screenshots/15401203/media/a452ce0193001e90bc3d93853b33f9fa.gif"
-              alt="face image"
-              className="Signup9"
-              // className="Signup10"
-            /> */}
-            {/* <div className="Signuo9a"> */}
-            <img
-              src={logo7}
-              // src="https://cdn.dribbble.com/users/7379292/screenshots/15401203/media/a452ce0193001e90bc3d93853b33f9fa.gif"
-              alt="face image"
-              className="Signup9"
-              // className="Signup10"
-            />
-            {/* <video className="Signup9" loop autoPlay={true} muted>
-                <source className="Signup9" src={logo8} type="video/mp4" />
-              </video> */}
-            {/* </div> */}
-          </div>
-          <div className="Signup8"></div>
-        </div>
-        <div className="Signup3">
-          <div className="Signup10"></div>
-          <div className="Signup11">
-            {showSignup12 && (
-              <div className="Signup12">
-                <div className="Signup13">Create your account</div>
-                <div className="Signup14">
-                  Created for developers by developers
-                </div>
-                {/* =============================== */}
-                {/* =================================== */}{" "}
-                <form className="SignupForm" onSubmit={handleSubmit}>
-                  {/* {errorMessage && (
-                    <div className="error-message">{errorMessage}</div>
-                  )} */}
-                  <div className="Signup17">
-                    <div className="Signup16">
-                      {/* Email */}
-                      <input
-                        className="inputa"
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        autoComplete="off"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="Signup17">
-                    <div className="Signup16">
-                      {/* User Name */}
-                      <input
-                        className="inputa"
-                        type="text"
-                        name="name"
-                        placeholder="User Name"
-                        autoComplete="off"
-                        required
-                        value={userName}
-                        onChange={(e) => setuserName(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="Signup17">
-                    <div className="Signup16">
-                      {/* Password */}
-                      <input
-                        className="inputa"
-                        type={showConfirmPassword ? "text" : "password"}
-                        // type="password"
-                        name="password"
-                        placeholder="Password"
-                        autoComplete="off"
-                        required
-                        value={password}
-                        minLength="6"
-                        onChange={(e) => setPassword(e.target.value)}
-                      />{" "}
-                      <div
-                        className="eye-icon"
-                        onClick={() => handleToggleConfirmPassword()}>
-                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="Signup17">
-                    <div className="Signup16">
-                      {/* Confirm Password */}
-                      <input
-                        className="inputa"
-                        // type="password"
-                        type={showPassword ? "text" : "password"}
-                        name="confirmPassword"
-                        placeholder="Confirm Password"
-                        autoComplete="off"
-                        required
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                      />
-                      <div
-                        className="eye-icon"
-                        onClick={() => handleTogglePassword()}>
-                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </div>
-                    </div>
-                  </div>{" "}
-                  <div className="Signup18">
-                    <input
-                      checked={termsChecked}
-                      onChange={() => {
-                        console.log("termschecked", termsChecked);
-                        setTermsChecked(!termsChecked);
-                      }}
-                      className="Signup19"
-                      type="checkbox"
-                    />
-                    <span className="Signup20">
-                      I agree to the Terms & Conditions
-                    </span>
-                  </div>
-                  <button
-                    disabled={loading}
-                    className={`Signup21 ${loading ? "loading" : ""}`}>
-                    <span
-                    // className="Signup21"
-                    // onClick={toggleSignup25}
-                    >
-                      <div
-                        className="Signup22"
-                        onClick={console.log("handleSubmit", handleSubmit)}
-                        type="submit">
-                        {loading ? "Loading..." : "Create Account"}
-                      </div>
-                    </span>
-                  </button>
-                  <div className="Signup23" onClick={toggleSignup25}>
-                    Already have an account ?{" "}
-                    <div className="Signup24"> Sign In</div>
-                  </div>
-                </form>
-                {/* ====================================== */}
+      <div className="a111c44">
+        <Container fluid>
+          <Row className="m-0 p-0">
+            <Col lg={1}>
+              <div className="Signup4 justify-content-lg-start d-flex justify-content-center align-items-center p-4 ">
+                <img className="Signup5 main_Logo " src={logo} alt="" />
               </div>
-            )}
-            {/* ------------------- */}
-            {showSignup29 && (
-              <form onSubmit={verifyhandleOtpSubmit}>
-                <div className="Signup25">
-                  <div className="Signup13">OTP Verification</div>
-                  <div className="Signup14">
-                    Please enter your One Time Password
-                  </div>
-                  <div className="Signup15">
-                    <div className="Signup16">{email}</div>
-                  </div>
-                  <div className="Signup27">
-                    <div className="Signup26">
-                      {otp.map((digit, index) => (
-                        <div className="Signup26" key={index}>
-                          <input
-                            className="Signup26as"
-                            type="text"
-                            maxLength="1"
+            </Col>
+            <Col lg={6} className="d-lg-block d-none">
+              <div>
+                {/* <div className="Signup4"> */}
+                {/* <img className="Signup5 main_Logo p-5" src={logo} alt="" /> */}
+                {/* </div> */}
+                <div className="Signup7 d-flex justify-content-center align-items-center p-5">
+                  <img src={logo7} alt="face image" className="Signup9 w-100" />
+                </div>
+              </div>
+            </Col>
+            <Col lg={5}>
+              <div className="Signup3">
+                <div className="Signup10 d-md-block"></div>
+                <div className="Signup11  px-5 d-flex justify-content-center align-items-lg-center align-items-start ">
+                  {showSignup12 && (
+                    <div className="Signup12">
+                      <div className="Signup13 text-center text-lg-start fs-4">
+                        <h2>Create your account</h2>
+                      </div>
+                      <div className=" text-center text-lg-start text-white my-3 mb-4 fs-6">
+                        Created for developers by developers
+                      </div>
+                      {/* <form onSubmit={handleSubmit}> */}
+                      <Form className="SignupForm" onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="email"
+                            placeholder="Email"
+                            className="Signup17 p-3"
+                            name="email"
+                            autoComplete="off"
                             required
-                            value={digit}
-                            onChange={(e) => handleChange(e, index)}
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                            ref={(ref) => {
-                              otpBoxes.current[index] = ref;
-                            }}
+                            value={email}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleEmailChange}
                           />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="Signup18">
-                    <span className="Signup20a" onClick={resendOtp}>
-                      Resend OTP
-                    </span>
-                  </div>
-                  <button
-                    disabled={loading}
-                    type="submit"
-                    className={`Signup21 ${loading ? "loading" : ""}`}>
-                    <div
-                    //  className="Signup21"
-                    >
-                      {loading ? "Loading..." : "Verify Otp"}
-                      {/* Verify Otp */}
-                    </div>
-                  </button>
-                  <div className="Signup23" onClick={toggleSignup12}>
-                    Don't have an account?{" "}
-                    <div className="Signup24">Sign Up</div>
-                  </div>
-                </div>
-              </form>
-            )}
-            {/* ----------------------------- */}
-            {showSignup25 && (
-              <div className="Signup25">
-                <div className="Signup13">Sign In</div>
-                <div className="Signup14">Login to manage your account</div>
-                <form className="SignupForm" onSubmit={handleSignIn}>
-                  <div className="Signup15">
-                    <div className="Signup16">
-                      {/* Email Here */}
-                      <input
-                        className="inputa"
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        autoComplete="off"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="Signup17">
-                    <div className="Signup16">
-                      {/* Password */}
-                      <input
-                        className="inputa"
-                        type={showPassword ? "text" : "password"}
-                        // type="password"
-                        name="password"
-                        placeholder="Password"
-                        autoComplete="off"
-                        minLength="6"
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />{" "}
-                      <div className="eye-icon" onClick={handleTogglePassword}>
-                        {showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </div>
-                    </div>
-                  </div>
-                  {/* {errorMessage && (
-                    <div className="error-message">{errorMessage}</div>
-                  )} */}
-                  <div className="Signup18" onClick={toggleSignup26}>
-                    <span className="Signup20a">Forgot Password?</span>
-                  </div>
-                  <button
-                    disabled={loading}
-                    type="
-                  submit"
-                    className={`Signup21 ${loading ? "loading" : ""}`}>
-                    <div
-                    //  className="Signup21"
-                    >
-                      {/* Sign In */}
-                      {loading ? "Loading..." : "Sign In"}
-                    </div>
-                  </button>
-                </form>
-                <div className="Signup23" onClick={toggleSignup12}>
-                  Don't have an account? <div className="Signup24">Sign Up</div>
-                </div>
-              </div>
-            )}{" "}
-            {showSignup26 && (
-              <div className="Signup25">
-                <div className="Signup13">Forgot Password</div>
-                <div className="Signup14">Please enter your Email</div>
-                <form className="SignupForm" onSubmit={handleSendOTP}>
-                  <div className="Signup15">
-                    <div className="Signup16">
-                      {/* Email Here */}
-                      <input
-                        className="inputa"
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        autoComplete="off"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    disabled={loading}
-                    type="submit"
-                    className={`Signup21 ${loading ? "loading" : ""}`}>
-                    <div
-                    // className="Signup21"
-                    >
-                      {/* Send OTP */}
-                      {loading ? "Loading..." : "Send OTP"}
-                    </div>
-                  </button>
-                </form>
-                <div className="Signup23" onClick={toggleSignup25}>
-                  Already have an account?{" "}
-                  <div className="Signup24">Sign In</div>
-                </div>
-              </div>
-            )}{" "}
-            {showSignup27 && (
-              <form onSubmit={handleOtpSubmit}>
-                <div className="Signup25">
-                  <div className="Signup13">OTP Verification</div>
-                  <div className="Signup14">
-                    Please enter your One Time Password
-                  </div>
-                  <div className="Signup15">
-                    <div className="Signup16">{email}</div>
-                  </div>
-                  <div className="Signup27">
-                    <div className="Signup26">
-                      {otp.map((digit, index) => (
-                        <div className="Signup26" key={index}>
-                          <input
-                            className="Signup26as"
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                          <Form.Control
                             type="text"
-                            maxLength="1"
+                            placeholder="User_name"
+                            className="Signup17 p-3"
+                            name="name"
+                            autoComplete="off"
                             required
-                            value={digit}
-                            onChange={(e) => handleChange(e, index)}
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                            ref={(ref) => {
-                              otpBoxes.current[index] = ref;
-                            }}
+                            value={userName}
+                            onChange={(e) => setuserName(e.target.value)}
                           />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="password"
+                            placeholder="Password"
+                            className="Signup17 p-3"
+                            name="password"
+                            autoComplete="off"
+                            required
+                            value={password}
+                            minLength="6"
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="password"
+                            placeholder="Confirm password"
+                            className="Signup17 p-3"
+                            name="confirmPassword"
+                            autoComplete="off"
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                          />{" "}
+                          <div className="Signup18 my-4">
+                            <input
+                              checked={termsChecked}
+                              onChange={() => {
+                                console.log("termschecked", termsChecked);
+                                setTermsChecked(!termsChecked);
+                              }}
+                              className="Signup19"
+                              type="checkbox"
+                            />
+                            <span className="Signup20 ms-2">
+                              I agree to the Terms & Conditions
+                            </span>
+                          </div>
+                          <Button
+                            disabled={loading}
+                            className={`my-1 p-3  Signup21 btn w-100  ${
+                              loading ? "loading" : ""
+                            }`}>
+                            <span>
+                              <div
+                                className="Signup22"
+                                onClick={() => handleSubmit()}
+                                type="submit">
+                                {loading ? "Loading..." : "Create Account"}
+                              </div>
+                            </span>
+                          </Button>
+                          <div
+                            className="Signup23 my-4"
+                            onClick={toggleSignup25}>
+                            Already have an account ?{" "}
+                            <div className="Signup24"> Sign In</div>
+                          </div>
+                        </Form.Group>
+                      </Form>
+                      {/* </form> */}
+                    </div>
+                  )}
+                  {showSignup25 && (
+                    <div className="Signup12">
+                      <div className="Signup13 text-center text-lg-start fs-4">
+                        <h2>Sign In</h2>
+                      </div>
+                      <div className=" text-center text-lg-start text-white my-3 mb-4 fs-6">
+                        Login to manage your account
+                      </div>
+                      {/* <form onSubmit={handleSubmit}> */}
+                      <Form className="SignupForm" onSubmit={handleSignIn}>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="email"
+                            placeholder="Email"
+                            className="Signup17 p-3"
+                            name="email"
+                            autoComplete="off"
+                            required
+                            value={email}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleEmailChange}
+                          />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="password"
+                            placeholder="Password"
+                            className="Signup17 p-3"
+                            name="password"
+                            autoComplete="off"
+                            required
+                            value={password}
+                            minLength="6"
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                          <div
+                            onClick={toggleSignup26}
+                            className="Signup18 my-4 d-flex justify-content-end text-end">
+                            <span className="Signup20 ms-2 ">
+                              Forgot Password ?
+                            </span>
+                          </div>
+                          {/* <Button
+                            disabled={loading}
+                            className={`my-1 p-3  Signup21 btn w-100   ${
+                              loading ? "loading" : ""
+                            }`}> */}
+                          {/* <div
+                            className="Signup22"
+                            onClick={() => handleSignIn()}
+                            type="submit">
+                            {loading ? "Loading..." : "Sign In"}
+                          </div> */}
+                          {/* </Button> */}
+                          <Button
+                            disabled={loading}
+                            type="submit"
+                            className={`my-1 p-3  Signup21 btn w-100   ${
+                              loading ? "loading" : ""
+                            }`}>
+                            <div className="Signup22" type="submit">
+                              {loading ? "Loading..." : "Sign In"}
+                            </div>
+                          </Button>
+                          <div
+                            className="Signup23 my-4"
+                            onClick={toggleSignup12}>
+                            Don't have an account ?{" "}
+                            <div className="Signup24"> Sign Up</div>
+                          </div>
+                        </Form.Group>
+                      </Form>
+                      {/* </form> */}
+                    </div>
+                  )}
+                  {showSignup26 && (
+                    <div className="Signup12">
+                      <div className="Signup13 text-center text-lg-start fs-4">
+                        <h2>Forgot Password</h2>
+                      </div>
+                      <div className=" text-center text-lg-start text-white my-3 mb-4 fs-6">
+                        Please enter your Email
+                      </div>
+                      {/* <form onSubmit={handleSubmit}> */}
+                      <Form className="SignupForm" onSubmit={handleSendOTP}>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="email"
+                            placeholder="Email"
+                            className="Signup17 p-3"
+                            name="email"
+                            autoComplete="off"
+                            required
+                            value={email}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleEmailChange}
+                          />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                          <Button
+                            disabled={loading}
+                            type="submit"
+                            className={`my-1 p-3  Signup21 btn w-100   ${
+                              loading ? "loading" : ""
+                            }`}>
+                            <div className="Signup22" type="submit">
+                              {loading ? "Loading..." : "Send OTP"}
+                            </div>
+                          </Button>
+                          <div
+                            className="Signup23 my-4"
+                            onClick={toggleSignup25}>
+                            Already have an account ?{" "}
+                            <div className="Signup24"> Sign In</div>
+                          </div>
+                        </Form.Group>
+                      </Form>
+                      {/* </form> */}
+                    </div>
+                  )}
+                  {showSignup27 && (
+                    <div className="Signup12">
+                      <div className="Signup13 text-center text-lg-start fs-4">
+                        <h2>OTP Verification</h2>
+                      </div>
+                      <div className=" text-center text-lg-start text-white my-3 mb-4 fs-6">
+                        Please enter your One Time Password
+                      </div>
+                      {/* <form onSubmit={handleSubmit}> */}
+                      <Form className="SignupForm" onSubmit={handleOtpSubmit}>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="email"
+                            placeholder="Email"
+                            className="Signup17 p-3"
+                            name="email"
+                            autoComplete="off"
+                            required
+                            value={email}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            // onChange={handleEmailChange}
+                          />
+                        </Form.Group>
+
+                        <Form.Group>
+                          <div className="signup2a d-flex justify-content-center align-items-center my-4">
+                            {otp.map((digit, index) => (
+                              <div
+                                className="Signup26 d-flex justify-content-center align-items-center"
+                                key={index}>
+                                <input
+                                  className="Signup26as"
+                                  type="text"
+                                  maxLength="1"
+                                  required
+                                  value={digit}
+                                  onChange={(e) => handleChange(e, index)}
+                                  onKeyDown={(e) => handleKeyDown(e, index)}
+                                  ref={(ref) => {
+                                    otpBoxes.current[index] = ref;
+                                  }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </Form.Group>
+                        <div
+                          onClick={resendOtp}
+                          className="Signup18 my-4 d-flex justify-content-end text-end">
+                          <span className="Signup20 ms-2 ">Resend OTP</span>
                         </div>
-                      ))}
+                        <Form.Group className="mb-3">
+                          <Button
+                            disabled={loading}
+                            type="submit"
+                            className={`my-1 p-3  Signup21 btn w-100   ${
+                              loading ? "loading" : ""
+                            }`}>
+                            <div className="Signup22" type="submit">
+                              {loading ? "Loading..." : "Send OTP"}
+                            </div>
+                          </Button>
+                          <div
+                            className="Signup23 my-4"
+                            onClick={toggleSignup25}>
+                            Already have an account ?{" "}
+                            <div className="Signup24"> Sign Up</div>
+                          </div>
+                        </Form.Group>
+                      </Form>
+                      {/* </form> */}
                     </div>
-                  </div>
-                  <div className="Signup18">
-                    <span className="Signup20a" onClick={resendOtp}>
-                      Resend OTP
-                    </span>
-                  </div>
-                  <button
-                    type="submit"
-                    className={`Signup21 ${loading ? "loading" : ""}`}
-                    // disabled={loading}
-                  >
-                    <div
-                    //  className="Signup21"
-                    >
-                      {/* Reset Password */}
-                      {loading ? "Loading..." : "Reset Password "}
-                    </div>
-                  </button>
-                  <div className="Signup23" onClick={toggleSignup26}>
-                    Wrong Email Address?
-                    <div className="Signup24">Click here</div>
-                  </div>
-                </div>
-              </form>
-            )}
-            {showSignup28 && (
-              <div className="Signup25">
-                <div className="Signup13">Reset Password</div>
-                <div className="Signup14">Please Reset your password</div>
-                <form onSubmit={handleResetPassword}>
-                  <div className="Signup15">
-                    <div className="Signup16">
-                      {/* Password */}
-                      <input
-                        className="inputa"
-                        // type="password"
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        placeholder="Password"
-                        minLength="6"
-                        autoComplete="off"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                      />
-                      <div className="eye-icon" onClick={handleTogglePassword}>
-                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  )}
+                  {showSignup28 && (
+                    <div className="Signup12">
+                      <div className="Signup13 text-center text-lg-start fs-4">
+                        <h2>Reset Password</h2>
                       </div>
-                    </div>
-                  </div>
-                  <div className="Signup15">
-                    <div className="Signup16">
-                      {/* Confirm Password */}
-                      <input
-                        className="inputa"
-                        // type="password"
-                        type={showConfirmPassword ? "text" : "password"}
-                        name="confirmPassword"
-                        placeholder="Confirm Password"
-                        autoComplete="off"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                      />
-                      <div
-                        className="eye-icon"
-                        onClick={() => handleToggleConfirmPassword()}>
-                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      <div className=" text-center text-lg-start text-white my-3 mb-4 fs-6">
+                        Please Reset your password
                       </div>
+                      {/* <form onSubmit={handleSubmit}> */}
+                      <Form
+                        className="SignupForm"
+                        onSubmit={handleResetPassword}>
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="password"
+                            placeholder="Password"
+                            className="Signup17 p-3"
+                            name="password"
+                            autoComplete="off"
+                            required
+                            value={password}
+                            minLength="6"
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                        </Form.Group>{" "}
+                        <Form.Group className="mb-3">
+                          <Form.Control
+                            type="password"
+                            placeholder="Confirm Password"
+                            className="Signup17 p-3"
+                            name="confirmPassword"
+                            autoComplete="off"
+                            required
+                            value={confirmPassword}
+                            minLength="6"
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                          />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                          {/* <Button
+                            disabled={loading}
+                            className={`my-1 p-3  Signup21 btn w-100   ${
+                              loading ? "loading" : ""
+                            }`}> */}
+                          {/* <div
+                            className="Signup22"
+                            onClick={() => handleSignIn()}
+                            type="submit">
+                            {loading ? "Loading..." : "Sign In"}
+                          </div> */}
+                          {/* </Button> */}
+                          <Button
+                            disabled={loading}
+                            type="submit"
+                            className={`my-1 p-3  Signup21 btn w-100   ${
+                              loading ? "loading" : ""
+                            }`}>
+                            <div className="Signup22" type="submit">
+                              {loading ? "Loading..." : "Reset Password "}
+                            </div>
+                          </Button>
+                          <div
+                            className="Signup23 my-4"
+                            onClick={toggleSignup25}>
+                            Already have an account ?{" "}
+                            <div className="Signup24"> Sign In</div>
+                          </div>
+                        </Form.Group>
+                      </Form>
+                      {/* </form> */}
                     </div>
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className={`Signup21 ${loading ? "loading" : ""}`}>
-                    <div
-                    //  className="Signup21"
-                    >
-                      {/* Reset Password */}
-                      {loading ? "Loading..." : "Reset Password "}
-                    </div>
-                  </button>
-                </form>
-                <div className="Signup23" onClick={toggleSignup25}>
-                  Already have an account?{" "}
-                  <div className="Signup24">Sign In</div>
+                  )}
                 </div>
               </div>
-            )}{" "}
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </Container>
       </div>
     </>
   );
