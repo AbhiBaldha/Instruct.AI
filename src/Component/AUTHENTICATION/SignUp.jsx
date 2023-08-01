@@ -125,7 +125,7 @@ function SignUp() {
       // toast.error("Please enter a valid email address.");
       // setEmailError("Please enter a valid email address.");
       axios
-        .post("http://localhost:80/auth/signUp", {
+        .post("https://instruct-ai-mk73.onrender.com/auth/signUp", {
           email,
           userName,
           password,
@@ -188,7 +188,7 @@ function SignUp() {
     }
     if (emailRegex?.test(email)) {
       axios
-        .post("http://localhost:80/auth/login", {
+        .post("https://instruct-ai-mk73.onrender.com/auth/login", {
           email,
           password,
           deviceToken: "test",
@@ -259,7 +259,7 @@ function SignUp() {
     }
 
     axios
-      .post("http://localhost:80/auth/forgot_password", {
+      .post("https://instruct-ai-mk73.onrender.com/auth/forgot_password", {
         email,
       })
       .then((response) => {
@@ -331,7 +331,7 @@ function SignUp() {
 
       // Call the API with OTP in the request body
       axios
-        .post("http://localhost:80/auth/otp_verification", {
+        .post("https://instruct-ai-mk73.onrender.com/auth/otp_verification", {
           otp: otpValue,
         })
         .then((response) => {
@@ -393,7 +393,7 @@ function SignUp() {
 
       // Call the API with OTP in the request body
       axios
-        .post("http://localhost:80/auth/otp_verification", {
+        .post("https://instruct-ai-mk73.onrender.com/auth/otp_verification", {
           otp: otpValue,
         })
         .then((response) => {
@@ -464,7 +464,7 @@ function SignUp() {
 
     // Call the API to reset the password
     axios
-      .post("http://localhost:80/auth/reset_password", {
+      .post("https://instruct-ai-mk73.onrender.com/auth/reset_password", {
         email,
         password,
       })
@@ -511,7 +511,7 @@ function SignUp() {
       return;
     }
     axios
-      .post("http://localhost:80/auth/resend_otp", {
+      .post("https://instruct-ai-mk73.onrender.com/auth/resend_otp", {
         email,
       })
       .then((response) => {
@@ -790,7 +790,7 @@ function SignUp() {
                   {showSignup25 && (
                     <div className="Signup12">
                       <div className="Signup13 text-center text-lg-start fs-4">
-                        <h2>Sign In</h2>
+                        <h2>Sign In </h2>
                       </div>
                       <div className=" text-center text-lg-start text-white my-3 mb-4 fs-6">
                         Login to manage your account

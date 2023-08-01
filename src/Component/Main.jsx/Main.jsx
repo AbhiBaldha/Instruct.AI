@@ -184,7 +184,7 @@ function Main() {
 
   const UserProfileGet = () => {
     axios
-      .get("http://localhost:80/user/get_profile", config)
+      .get("https://instruct-ai-mk73.onrender.com/user/get_profile", config)
       .then((response) => {
         setUserProfile(response?.data);
       })
@@ -207,7 +207,7 @@ function Main() {
 
   const RoomsearchHistory = () => {
     axios
-      .get("http://localhost:80/user/get/historyRoom", config)
+      .get("https://instruct-ai-mk73.onrender.com/user/get/historyRoom", config)
       .then((response) => {
         setRoomsearchHistorydata(response?.data);
         if (response && response.data && response.data.message) {
@@ -236,7 +236,10 @@ function Main() {
 
   const weeklyGraphData = () => {
     axios
-      .get("http://localhost:80/user/get/weeklyReport", config)
+      .get(
+        "https://instruct-ai-mk73.onrender.com/user/get/weeklyReport",
+        config
+      )
       .then((response) => {
         setweeklyGraph(response?.data);
         if (response && response.data && response.data.message) {
@@ -322,7 +325,7 @@ function Main() {
     if (fget_historyRoom_by_id) {
       axios
         .get(
-          `http://localhost:80/user/get/historyRoom/${fget_historyRoom_by_id}`,
+          `https://instruct-ai-mk73.onrender.com/user/get/historyRoom/${fget_historyRoom_by_id}`,
           config
         )
         .then((response) => {
@@ -358,7 +361,11 @@ function Main() {
     };
     if (value) {
       axios
-        .post("http://localhost:80/user/ChatWithGpt", body, config)
+        .post(
+          "https://instruct-ai-mk73.onrender.com/user/ChatWithGpt",
+          body,
+          config
+        )
         .then((response) => {
           get_historyRoom_by_id(fget_historyRoom_by_id);
 
@@ -390,7 +397,11 @@ function Main() {
     };
     if (value) {
       axios
-        .put("http://localhost:80/user/update/chat/by_id", body, config)
+        .put(
+          "https://instruct-ai-mk73.onrender.com/user/update/chat/by_id",
+          body,
+          config
+        )
         .then((response) => {
           setisUpdateClicked(false);
           // get_historyRoom_by_id(UpdateApiId);
@@ -418,7 +429,11 @@ function Main() {
     };
     if (Title) {
       axios
-        .put("http://localhost:80/user/update/historyRoom/by_id", body, config)
+        .put(
+          "https://instruct-ai-mk73.onrender.com/user/update/historyRoom/by_id",
+          body,
+          config
+        )
         .then((response) => {
           get_historyRoom_by_id(fget_historyRoom_by_id);
           setbuttonActive(false);
@@ -440,7 +455,7 @@ function Main() {
     if (id_for_delete) {
       axios
         .delete(
-          `http://localhost:80/user/delete/historyRoom/${id_for_delete}`,
+          `https://instruct-ai-mk73.onrender.com/user/delete/historyRoom/${id_for_delete}`,
           config
         )
         .then((response) => {
@@ -491,7 +506,11 @@ function Main() {
     };
     if (value) {
       axios
-        .post("http://localhost:80/user/ChatWithGpt", body, config)
+        .post(
+          "https://instruct-ai-mk73.onrender.com/user/ChatWithGpt",
+          body,
+          config
+        )
         .then((response) => {
           setIsNewChatClicked(false);
           setActiveId(response?.data?.data?.historyRoom?._id);
@@ -643,7 +662,11 @@ function Main() {
     };
 
     axios
-      .put("http://localhost:80/user/update_profile", userData, config)
+      .put(
+        "https://instruct-ai-mk73.onrender.com/user/update_profile",
+        userData,
+        config
+      )
       .then((response) => {
         console.log(response.data);
         // Reset the error message and clear the form
@@ -703,7 +726,11 @@ function Main() {
     };
 
     axios
-      .post("http://localhost:80/user/change_password", passwordData, config)
+      .post(
+        "https://instruct-ai-mk73.onrender.com/user/change_password",
+        passwordData,
+        config
+      )
       .then((response) => {
         toast.success("Password Chasnge Succesfully");
         // Handle the API response if needed
@@ -726,7 +753,8 @@ function Main() {
         //  className="container"
         className={
           isLightTheme ? "containeramain light" : "containeramain dark"
-        }>
+        }
+      >
         <div className="mainpart">
           <div
             className={isLightTheme ? "LeftPart light" : "LeftPart dark"}
@@ -735,7 +763,8 @@ function Main() {
           >
             <div
               //  className="l1"
-              className={isLightTheme ? "l1 light" : "l1 dark"}>
+              className={isLightTheme ? "l1 light" : "l1 dark"}
+            >
               {/* <h2>INSTRUCT AI</h2> */}
               {isLightTheme ? (
                 <img className="l1a" src={logo12} alt=";logo" />
@@ -746,7 +775,8 @@ function Main() {
             {/* ----------------------------------------- */}
             <div
               // className="l5"
-              className={isLightTheme ? "l5 light" : "l5"}>
+              className={isLightTheme ? "l5 light" : "l5"}
+            >
               {/* ----------------------------- */}
               {RoomsearchHistoryData?.data?.length > 0 ? (
                 RoomsearchHistoryData?.data?.map((val) => {
@@ -778,7 +808,8 @@ function Main() {
                                   isLightTheme ? "L2 light" : "L2 dark"
                                 } ${isActive ? "activehistorydark" : ""} ${
                                   isActive1 ? "activehistorylight" : ""
-                                }`}>
+                                }`}
+                              >
                                 <div
                                   onClick={() => {
                                     handleNavigation("history");
@@ -789,7 +820,8 @@ function Main() {
                                   }}
                                   className={
                                     isLightTheme ? "l3 light" : "l3 dark"
-                                  }>
+                                  }
+                                >
                                   <LuStars />
                                 </div>
                                 <div className="l4">
@@ -820,7 +852,8 @@ function Main() {
                                         console.log("abhi3", valuea?._id);
                                         setIsTitleEditing(false);
                                       }}
-                                      className="l4">
+                                      className="l4"
+                                    >
                                       {valuea?.title}
                                     </div>
                                   )}
@@ -907,7 +940,8 @@ function Main() {
                                   isLightTheme ? "L2 light" : "L2 dark"
                                 } ${isActive ? "activehistorydark" : ""} ${
                                   isActive1 ? "activehistorylight" : ""
-                                }`}>
+                                }`}
+                              >
                                 <div
                                   onClick={() => {
                                     handleNavigation("history");
@@ -918,7 +952,8 @@ function Main() {
                                   }}
                                   className={
                                     isLightTheme ? "l3 light" : "l3 dark"
-                                  }>
+                                  }
+                                >
                                   <LuStars />
                                 </div>
                                 <div className="l4">
@@ -949,7 +984,8 @@ function Main() {
                                         console.log("abhi3", valuea?._id);
                                         setIsTitleEditing(false);
                                       }}
-                                      className="l4">
+                                      className="l4"
+                                    >
                                       {valuea?.title}
                                     </div>
                                   )}
@@ -1035,7 +1071,8 @@ function Main() {
                                   isLightTheme ? "L2 light" : "L2 dark"
                                 } ${isActive ? "activehistorydark" : ""} ${
                                   isActive1 ? "activehistorylight" : ""
-                                }`}>
+                                }`}
+                              >
                                 <div
                                   onClick={() => {
                                     handleNavigation("history");
@@ -1047,7 +1084,8 @@ function Main() {
                                   }}
                                   className={
                                     isLightTheme ? "l3 light" : "l3 dark"
-                                  }>
+                                  }
+                                >
                                   <LuStars />
                                 </div>
                                 <div className="l4">
@@ -1078,7 +1116,8 @@ function Main() {
                                         console.log("abhi3", valuea?._id);
                                         setIsTitleEditing(false);
                                       }}
-                                      className="l4">
+                                      className="l4"
+                                    >
                                       {valuea?.title}
                                     </div>
                                   )}
@@ -1163,7 +1202,8 @@ function Main() {
                                   isLightTheme ? "L2 light" : "L2 dark"
                                 } ${isActive ? "activehistorydark" : ""} ${
                                   isActive1 ? "activehistorylight" : ""
-                                }`}>
+                                }`}
+                              >
                                 <div
                                   onClick={() => {
                                     setIsNewChatClicked(false);
@@ -1176,7 +1216,8 @@ function Main() {
                                   }}
                                   className={
                                     isLightTheme ? "l3 light" : "l3 dark"
-                                  }>
+                                  }
+                                >
                                   <LuStars />
                                 </div>
                                 <div className="l4">
@@ -1207,7 +1248,8 @@ function Main() {
                                         console.log("abhi3", valuea?._id);
                                         setIsTitleEditing(false);
                                       }}
-                                      className="l4">
+                                      className="l4"
+                                    >
                                       {valuea?.title}
                                     </div>
                                   )}
@@ -1293,7 +1335,8 @@ function Main() {
                                   isLightTheme ? "L2 light" : "L2 dark"
                                 } ${isActive ? "activehistorydark" : ""} ${
                                   isActive1 ? "activehistorylight" : ""
-                                }`}>
+                                }`}
+                              >
                                 <div
                                   onClick={() => {
                                     handleNavigation("history");
@@ -1304,7 +1347,8 @@ function Main() {
                                   }}
                                   className={
                                     isLightTheme ? "l3 light" : "l3 dark"
-                                  }>
+                                  }
+                                >
                                   <LuStars />
                                 </div>
                                 <div className="l4">
@@ -1335,7 +1379,8 @@ function Main() {
                                         console.log("abhi3", valuea?._id);
                                         setIsTitleEditing(false);
                                       }}
-                                      className="l4">
+                                      className="l4"
+                                    >
                                       {valuea?.title}
                                     </div>
                                   )}
@@ -1421,13 +1466,16 @@ function Main() {
 
             <div
               //  className="l6"
-              className={isLightTheme ? "l6 light" : "l6 dark"}>
+              className={isLightTheme ? "l6 light" : "l6 dark"}
+            >
               <div
                 //  className="l17"
-                className={isLightTheme ? "l17 light" : "l17 dark"}>
+                className={isLightTheme ? "l17 light" : "l17 dark"}
+              >
                 <div
                   //  className="l12"
-                  className={isLightTheme ? "l12 light" : "l12 dark"}>
+                  className={isLightTheme ? "l12 light" : "l12 dark"}
+                >
                   Credits
                 </div>
                 {/* <div
@@ -1440,7 +1488,8 @@ function Main() {
                 <ProgressBar className="prg1" now={progressPercentage} />
                 <div
                   // className="l15"
-                  className={isLightTheme ? "l15 light" : "l15 dark"}>
+                  className={isLightTheme ? "l15 light" : "l15 dark"}
+                >
                   {weeklyGraph?.data?.total_count}/{maxCount} credits used
                 </div>
                 <div className="l16">
@@ -1537,7 +1586,8 @@ function Main() {
               {/* ------------------------------------------ */}
               <div
                 //  className="r2"
-                className={isLightTheme ? "r2 light" : "r2 dark"}>
+                className={isLightTheme ? "r2 light" : "r2 dark"}
+              >
                 <div
                   // className="r3"
                   className={isLightTheme ? "r3 light" : "r3 dark"}
@@ -1545,33 +1595,39 @@ function Main() {
                     newQuery();
                     setfget_historyRoom_by_id("");
                     setActiveId("");
-                  }}>
+                  }}
+                >
                   <div
                     //  className="r3a"
-                    className={isLightTheme ? "r3a light" : "r3a "}>
+                    className={isLightTheme ? "r3a light" : "r3a "}
+                  >
                     <IoAddCircleOutline />
                   </div>
                   <div
                     //  className="r3b"
-                    className={isLightTheme ? "r3b light" : "r3b "}>
+                    className={isLightTheme ? "r3b light" : "r3b "}
+                  >
                     New Chat
                   </div>
                   {/* <input className="r4" type="search" name="" id="" /> */}
                 </div>
                 <div
                   //  className="r5"
-                  className={isLightTheme ? "r5 light" : "r5 dark"}>
+                  className={isLightTheme ? "r5 light" : "r5 dark"}
+                >
                   <IoMdLock />
                 </div>{" "}
                 <div
                   //  className="r5"
-                  className={isLightTheme ? "r5 light" : "r5 dark"}>
+                  className={isLightTheme ? "r5 light" : "r5 dark"}
+                >
                   <AiOutlineInfoCircle />
                 </div>{" "}
                 <div
                   // className="r5"
                   className={isLightTheme ? "r5 light" : "r5 dark"}
-                  onClick={toggleTheme}>
+                  onClick={toggleTheme}
+                >
                   {isLightTheme ? <BiMoon /> : <BiSolidSun />}
                 </div>
                 <div
@@ -1676,13 +1732,15 @@ function Main() {
                                   //  className="r30"
                                   className={
                                     isLightTheme ? "r30 light " : "r30 dark  "
-                                  }>
+                                  }
+                                >
                                   {" "}
                                   <div
                                     //  className="r31"
                                     className={
                                       isLightTheme ? "r31 light " : "r31 dark  "
-                                    }>
+                                    }
+                                  >
                                     <div className="r32">
                                       {/* React Js */}
                                       {/* {firstWords} */}
@@ -1696,7 +1754,8 @@ function Main() {
                                         setCopyALlCOde(msg);
                                         // setTextToCopy(finalCodeBlocks);
                                         handleCopyClick(index, msg);
-                                      }}>
+                                      }}
+                                    >
                                       {copied[index] ? "Copied" : "Copy"}
                                     </div>
                                   </div>{" "}
@@ -1735,7 +1794,8 @@ function Main() {
                                     //  className="cod1"
                                     className={
                                       isLightTheme ? "cod1  " : "cod1 dark "
-                                    }>
+                                    }
+                                  >
                                     {/* {split?.[0]} */}
                                     {msg.replace(/```/g, "")}
                                   </code>
@@ -1749,8 +1809,9 @@ function Main() {
 
                           const handleCopyClick = (index, msg) => {
                             // Create a temporary textarea element to copy the text
-                            const tempTextarea =
-                              document.createElement("textarea");
+                            const tempTextarea = document.createElement(
+                              "textarea"
+                            );
                             tempTextarea.value = msg;
 
                             document.body.appendChild(tempTextarea);
@@ -1783,12 +1844,14 @@ function Main() {
                                 // className="r21"
                                 className={
                                   isLightTheme ? "r21 light " : "r21 dark  "
-                                }>
+                                }
+                              >
                                 <div
                                   //  className="r22"
                                   className={
                                     isLightTheme ? "r22 light " : "r22 dark  "
-                                  }>
+                                  }
+                                >
                                   {getRoomResponse?.user_data?.map((abc) => {
                                     return (
                                       <>
@@ -1811,7 +1874,8 @@ function Main() {
                                     <div
                                       className={
                                         isLightTheme ? "r23 light " : "r23"
-                                      }>
+                                      }
+                                    >
                                       {val?.question}
                                       {/* <code> */}
                                       {/* <input
@@ -1862,7 +1926,8 @@ function Main() {
                                       }}
                                       className={
                                         isLightTheme ? "r24 light " : "r24"
-                                      }>
+                                      }
+                                    >
                                       <BiMessageSquareEdit />
                                     </div>
                                   </>
@@ -1872,7 +1937,8 @@ function Main() {
                                     <div
                                       className={
                                         isLightTheme ? "r23 light " : "r23"
-                                      }>
+                                      }
+                                    >
                                       {val?.question}
                                     </div>
                                     <div
@@ -1885,7 +1951,8 @@ function Main() {
                                       }}
                                       className={
                                         isLightTheme ? "r24 light " : "r24"
-                                      }>
+                                      }
+                                    >
                                       <BiMessageSquareEdit />
                                     </div>
                                   </>
@@ -1897,7 +1964,8 @@ function Main() {
                                   // className="r22"
                                   className={
                                     isLightTheme ? "r22 light " : "r22 dark  "
-                                  }>
+                                  }
+                                >
                                   <img
                                     className="r22a"
                                     src={logomain2}
@@ -1933,7 +2001,8 @@ function Main() {
                                     //  className="r30"
                                     className={
                                       isLightTheme ? "r30 light " : "r30 dark  "
-                                    }>
+                                    }
+                                  >
                                     {" "}
                                     <div
                                       //  className="r31"
@@ -1941,7 +2010,8 @@ function Main() {
                                         isLightTheme
                                           ? "r31 light "
                                           : "r31 dark  "
-                                      }>
+                                      }
+                                    >
                                       <div className="r32">
                                         {/* React Js */}
                                         {/* {firstWords} */}
@@ -1955,7 +2025,8 @@ function Main() {
                                           setCopyALlCOde(msg);
                                           // setTextToCopy(finalCodeBlocks);
                                           handleCopyClick(index, msg);
-                                        }}>
+                                        }}
+                                      >
                                         {copied[index] ? "Copied" : "Copy"}
                                       </div>
                                     </div>{" "}
@@ -1994,7 +2065,8 @@ function Main() {
                                       //  className="cod1"
                                       className={
                                         isLightTheme ? "cod1  " : "cod1 dark "
-                                      }>
+                                      }
+                                    >
                                       {/* {split?.[0]} */}
                                       {msg.replace(/```/g, "")}
                                     </code>
@@ -2003,14 +2075,16 @@ function Main() {
                                 );
                               }
                             };
-                            const messageBlocks =
-                              response.split(codeBlockRegex);
+                            const messageBlocks = response.split(
+                              codeBlockRegex
+                            );
                             // -----------------------
 
                             const handleCopyClick = (index, msg) => {
                               // Create a temporary textarea element to copy the text
-                              const tempTextarea =
-                                document.createElement("textarea");
+                              const tempTextarea = document.createElement(
+                                "textarea"
+                              );
                               tempTextarea.value = msg;
 
                               document.body.appendChild(tempTextarea);
@@ -2043,12 +2117,14 @@ function Main() {
                                   // className="r21"
                                   className={
                                     isLightTheme ? "r21 light " : "r21 dark  "
-                                  }>
+                                  }
+                                >
                                   <div
                                     //  className="r22"
                                     className={
                                       isLightTheme ? "r22 light " : "r22 dark  "
-                                    }>
+                                    }
+                                  >
                                     {getRoomResponse?.user_data?.map((abc) => {
                                       return (
                                         <>
@@ -2071,7 +2147,8 @@ function Main() {
                                       <div
                                         className={
                                           isLightTheme ? "r23 light " : "r23"
-                                        }>
+                                        }
+                                      >
                                         {val?.question}
                                         {/* <code> */}
                                         {/* <input
@@ -2122,7 +2199,8 @@ function Main() {
                                         }}
                                         className={
                                           isLightTheme ? "r24 light " : "r24"
-                                        }>
+                                        }
+                                      >
                                         <BiMessageSquareEdit />
                                       </div>
                                     </>
@@ -2132,7 +2210,8 @@ function Main() {
                                       <div
                                         className={
                                           isLightTheme ? "r23 light " : "r23"
-                                        }>
+                                        }
+                                      >
                                         {val?.question}
                                       </div>
                                       <div
@@ -2145,7 +2224,8 @@ function Main() {
                                         }}
                                         className={
                                           isLightTheme ? "r24 light " : "r24"
-                                        }>
+                                        }
+                                      >
                                         <BiMessageSquareEdit />
                                       </div>
                                     </>
@@ -2157,7 +2237,8 @@ function Main() {
                                     // className="r22"
                                     className={
                                       isLightTheme ? "r22 light " : "r22 dark  "
-                                    }>
+                                    }
+                                  >
                                     <img
                                       className="r22a"
                                       src={logomain2}
@@ -2302,8 +2383,9 @@ function Main() {
 
                           const handleCopyClick = (index) => {
                             // Create a temporary textarea element to copy the text
-                            const tempTextarea =
-                              document.createElement("textarea");
+                            const tempTextarea = document.createElement(
+                              "textarea"
+                            );
                             tempTextarea.value = finalCodeBlocks;
                             document.body.appendChild(tempTextarea);
 
@@ -2335,12 +2417,14 @@ function Main() {
                                 // className="r21"
                                 className={
                                   isLightTheme ? "r21 light " : "r21 dark  "
-                                }>
+                                }
+                              >
                                 <div
                                   //  className="r22"
                                   className={
                                     isLightTheme ? "r22 light " : "r22 dark  "
-                                  }>
+                                  }
+                                >
                                   {getRoomResponse?.user_data?.map((abc) => {
                                     return (
                                       <>
@@ -2363,7 +2447,8 @@ function Main() {
                                     <div
                                       className={
                                         isLightTheme ? "r23 light " : "r23"
-                                      }>
+                                      }
+                                    >
                                       {val?.question}
                                       {/* <code> */}
                                       {/* <input
@@ -2414,7 +2499,8 @@ function Main() {
                                       }}
                                       className={
                                         isLightTheme ? "r24 light " : "r24"
-                                      }>
+                                      }
+                                    >
                                       <BiMessageSquareEdit />
                                     </div>
                                   </>
@@ -2424,7 +2510,8 @@ function Main() {
                                     <div
                                       className={
                                         isLightTheme ? "r23 light " : "r23"
-                                      }>
+                                      }
+                                    >
                                       {val?.question}
                                     </div>
                                     <div
@@ -2437,7 +2524,8 @@ function Main() {
                                       }}
                                       className={
                                         isLightTheme ? "r24 light " : "r24"
-                                      }>
+                                      }
+                                    >
                                       <BiMessageSquareEdit />
                                     </div>
                                   </>
@@ -2450,12 +2538,14 @@ function Main() {
                                   isLightTheme
                                     ? "r21answer light "
                                     : "r21answer"
-                                }>
+                                }
+                              >
                                 <div
                                   // className="r22"
                                   className={
                                     isLightTheme ? "r22 light " : "r22 dark  "
-                                  }>
+                                  }
+                                >
                                   <img
                                     className="r22a"
                                     src={logomain2}
@@ -2466,7 +2556,8 @@ function Main() {
                                   // className="r23"
                                   className={
                                     isLightTheme ? "r23 light " : "r23 dark"
-                                  }>
+                                  }
+                                >
                                   {/* Lorem Ipsum is simply dummy text of the printing and
                             typesetting industry. Lorem Ipsum has been the
                             industry's standard dummy text ever since the 1500s,
@@ -2484,7 +2575,8 @@ function Main() {
                                       //  className="cod1"
                                       className={
                                         isLightTheme ? "cod1  " : "cod1 dark "
-                                      }>
+                                      }
+                                    >
                                       {textBeforeCode}
                                     </code>
                                   </div>
@@ -2496,7 +2588,8 @@ function Main() {
                                         isLightTheme
                                           ? "r30 light "
                                           : "r30 dark  "
-                                      }>
+                                      }
+                                    >
                                       {" "}
                                       <div
                                         //  className="r31"
@@ -2504,7 +2597,8 @@ function Main() {
                                           isLightTheme
                                             ? "r31 light "
                                             : "r31 dark  "
-                                        }>
+                                        }
+                                      >
                                         <div className="r32">
                                           {/* React Js */}
                                           {firstWords}
@@ -2516,7 +2610,8 @@ function Main() {
                                           onClick={() => {
                                             // setTextToCopy(finalCodeBlocks);
                                             handleCopyClick(index);
-                                          }}>
+                                          }}
+                                        >
                                           {copied[index] ? "Copied" : "Copy"}
                                         </div>
                                       </div>{" "}
@@ -2559,7 +2654,8 @@ function Main() {
                                       //  className="cod1"
                                       className={
                                         isLightTheme ? "cod1  " : "cod1 dark "
-                                      }>
+                                      }
+                                    >
                                       {textAfterCode1}
                                     </code>
                                   </div>
@@ -2570,19 +2666,22 @@ function Main() {
                                     isLightTheme
                                       ? "r24answer light "
                                       : "r24answer "
-                                  }>
+                                  }
+                                >
                                   <div
                                     // className="r24"
                                     className={
                                       isLightTheme ? "r24  light " : "r24  "
-                                    }>
+                                    }
+                                  >
                                     <AiOutlineLike />
                                   </div>{" "}
                                   <div
                                     //  className="r24"
                                     className={
                                       isLightTheme ? "r24  light " : "r24  "
-                                    }>
+                                    }
+                                  >
                                     <AiOutlineDislike />
                                   </div>
                                 </div>
@@ -2645,8 +2744,9 @@ function Main() {
 
                             const handleCopyClick1 = (index) => {
                               // Create a temporary textarea element to copy the text
-                              const tempTextarea =
-                                document.createElement("textarea");
+                              const tempTextarea = document.createElement(
+                                "textarea"
+                              );
                               tempTextarea.value = finalCodeBlocks;
                               document.body.appendChild(tempTextarea);
 
@@ -2706,12 +2806,14 @@ function Main() {
                                   // className="r21"
                                   className={
                                     isLightTheme ? "r21 light " : "r21 dark  "
-                                  }>
+                                  }
+                                >
                                   <div
                                     //  className="r22"
                                     className={
                                       isLightTheme ? "r22 light " : "r22 dark  "
-                                    }>
+                                    }
+                                  >
                                     <img
                                       className="r22a"
                                       src={logomain2}
@@ -2722,7 +2824,8 @@ function Main() {
                                     // className="r23"
                                     className={
                                       isLightTheme ? "r23 light " : "r23"
-                                    }>
+                                    }
+                                  >
                                     {/* Hello , How are you ! */}
                                     {val?.question}
                                   </div>
@@ -2736,7 +2839,8 @@ function Main() {
                                     //  className="r24"
                                     className={
                                       isLightTheme ? "r24 light " : "r24"
-                                    }>
+                                    }
+                                  >
                                     <BiMessageSquareEdit />
                                   </div>
                                 </div>{" "}
@@ -2747,12 +2851,14 @@ function Main() {
                                     isLightTheme
                                       ? "r21answer light "
                                       : "r21answer"
-                                  }>
+                                  }
+                                >
                                   <div
                                     // className="r22"
                                     className={
                                       isLightTheme ? "r22 light " : "r22 dark  "
-                                    }>
+                                    }
+                                  >
                                     <img
                                       className="r22a"
                                       src={logomain2}
@@ -2763,7 +2869,8 @@ function Main() {
                                     // className="r23"
                                     className={
                                       isLightTheme ? "r23 light " : "r23 dark"
-                                    }>
+                                    }
+                                  >
                                     {/* Lorem Ipsum is simply dummy text of the printing and
                           typesetting industry. Lorem Ipsum has been the
                           industry's standard dummy text ever since the 1500s,
@@ -2781,7 +2888,8 @@ function Main() {
                                         //  className="cod1"
                                         className={
                                           isLightTheme ? "cod1  " : "cod1 dark "
-                                        }>
+                                        }
+                                      >
                                         {textBeforeCode}
                                       </code>
                                     </div>
@@ -2793,7 +2901,8 @@ function Main() {
                                           isLightTheme
                                             ? "r30 light "
                                             : "r30 dark  "
-                                        }>
+                                        }
+                                      >
                                         {" "}
                                         <div
                                           //  className="r31"
@@ -2801,7 +2910,8 @@ function Main() {
                                             isLightTheme
                                               ? "r31 light "
                                               : "r31 dark  "
-                                          }>
+                                          }
+                                        >
                                           <div className="r32">
                                             {/* React Js */}
                                             {firstWords}
@@ -2812,7 +2922,8 @@ function Main() {
                                             onClick={() => {
                                               // setTextToCopy(finalCodeBlocks);
                                               handleCopyClick1(index);
-                                            }}>
+                                            }}
+                                          >
                                             {copied[index] ? "Copied" : "Copy"}
                                           </div>
                                         </div>{" "}
@@ -2855,7 +2966,8 @@ function Main() {
                                         //  className="cod1"
                                         className={
                                           isLightTheme ? "cod1  " : "cod1 dark "
-                                        }>
+                                        }
+                                      >
                                         {textAfterCode1}
                                       </code>
                                     </div>
@@ -2866,19 +2978,22 @@ function Main() {
                                       isLightTheme
                                         ? "r24answer light "
                                         : "r24answer "
-                                    }>
+                                    }
+                                  >
                                     <div
                                       // className="r24"
                                       className={
                                         isLightTheme ? "r24  light " : "r24  "
-                                      }>
+                                      }
+                                    >
                                       <AiOutlineLike />
                                     </div>{" "}
                                     <div
                                       //  className="r24"
                                       className={
                                         isLightTheme ? "r24  light " : "r24  "
-                                      }>
+                                      }
+                                    >
                                       <AiOutlineDislike />
                                     </div>
                                   </div>
@@ -2972,9 +3087,8 @@ function Main() {
                                 name=""
                                 maxLength={155}
                                 value={aboutMe}
-                                onChange={(e) =>
-                                  setAboutMe(e.target.value)
-                                }></textarea>
+                                onChange={(e) => setAboutMe(e.target.value)}
+                              ></textarea>
                             </div>
                             {/* Error message */}
                             {errorMessage && (
@@ -3070,7 +3184,8 @@ function Main() {
                         : ` custom-input-container  ${
                             containerActive ? "active" : ""
                           }`
-                    }>
+                    }
+                  >
                     <textarea
                       ref={textareaRef}
                       placeholder="Send a message"
@@ -3105,7 +3220,8 @@ function Main() {
                   </div>
                   <span
                     //  className="r20"
-                    className={isLightTheme ? "r20  light " : "r20  "}>
+                    className={isLightTheme ? "r20  light " : "r20  "}
+                  >
                     Free Research Preview. Instruct.ai may produce inaccurate
                     information about people, places, or facts. Instruct.ai Sep
                     26 Version
@@ -3135,7 +3251,8 @@ function Main() {
                         : ` custom-input-container  ${
                             containerActive ? "active" : ""
                           }`
-                    }>
+                    }
+                  >
                     <textarea
                       ref={textareaRef}
                       placeholder="Send a message"
@@ -3170,7 +3287,8 @@ function Main() {
                   </div>
                   <span
                     //  className="r20"
-                    className={isLightTheme ? "r20  light " : "r20  "}>
+                    className={isLightTheme ? "r20  light " : "r20  "}
+                  >
                     Free Research Preview. Instruct.ai may produce inaccurate
                     information about people, places, or facts. Instruct.ai Sep
                     26 Version
