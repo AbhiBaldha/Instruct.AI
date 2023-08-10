@@ -1,0 +1,139 @@
+  {activeScreen === "new" && (
+                      <div className="r15">
+                        {/* <div className="r15a">
+                  <div className="r15b">
+                    <input
+                        className={isLightTheme ? "r24  light " : "r24  "}>
+
+                      type="text"
+                      placeholder="Send a message"
+                      className="r15d"
+                    />
+                  </div>
+                  <div className="r15c">Send</div>
+                </div> */}
+                        <div
+                          className={
+                            isLightTheme
+                              ? ` custom-input-containera  ${
+                                  containerActive ? "active" : ""
+                                }`
+                              : ` custom-input-container  ${
+                                  containerActive ? "active" : ""
+                                }`
+                          }>
+                          <textarea
+                            ref={textareaRef}
+                            placeholder="Send a message"
+                            value={value}
+                            onChange={handleInputChange}
+                            onInput={(event) => adjustHeight(event.target)}
+                            // className={`custom-input ${
+                            //   containerActive ? "active" : ""
+                            // }`}
+                            className={
+                              isLightTheme
+                                ? `custom-inputa ${
+                                    containerActive ? "active" : ""
+                                  }`
+                                : `custom-input ${
+                                    containerActive ? "active" : ""
+                                  }`
+                            }
+                          />
+                          <button
+                            onClick={() => {
+                              handleNewChatClick();
+                              // QuerySend();
+                            }}
+                            className={
+                              isLightTheme
+                                ? `custom-buttona ${
+                                    containerActive ? "active" : ""
+                                  }`
+                                : `custom-button ${
+                                    containerActive ? "active" : ""
+                                  }`
+                            }
+                            // className={`custom-button ${
+                            //   containerActive ? "active" : ""
+                            // }`}
+                          >
+                            <AiOutlineSend />
+                          </button>
+                        </div>
+                        <span
+                          //  className="r20"
+                          className={isLightTheme ? "r20  light " : "r20  "}>
+                          Free Research Preview. Instruct.ai may produce
+                          inaccurate information about people, places, or facts.
+                          Instruct.ai Sep 26 Version
+                        </span>
+                      </div>
+                    )}
+                    {activeScreen === "history" && (
+                      <div className="r15">
+                        <div
+                          className={
+                            isLightTheme
+                              ? ` custom-input-containera  ${
+                                  containerActive ? "active" : ""
+                                }`
+                              : ` custom-input-container  ${
+                                  containerActive ? "active" : ""
+                                }`
+                          }>
+                          {/* <Form> */}
+                          {/* <Form.Group className="mb-3">
+                            <Form.Control as="textarea" rows={3} />
+                          </Form.Group> */}
+                          <textarea
+                            ref={textareaRef}
+                            placeholder="Send a message"
+                            value={value}
+                            onChange={handleInputChange}
+                            onInput={(event) => adjustHeight(event.target)}
+                            // className={`custom-input ${
+                            //   containerActive ? "active" : ""
+                            // }`}
+                            className={
+                              isLightTheme
+                                ? `custom-inputa ${
+                                    containerActive ? "active" : ""
+                                  }`
+                                : `custom-input ${
+                                    containerActive ? "active" : ""
+                                  }`
+                            }
+                          />
+                          {/* </Form> */}
+                          <button
+                            onClick={() => {
+                              handleNewChatClick();
+                              // QuerySend();
+                            }}
+                            className={
+                              isLightTheme
+                                ? `custom-buttona ${
+                                    containerActive ? "active" : ""
+                                  }`
+                                : `custom-button ${
+                                    containerActive ? "active" : ""
+                                  }`
+                            }
+                            // className={`custom-button ${
+                            //   containerActive ? "active" : ""
+                            // }`}
+                          >
+                            <AiOutlineSend />
+                          </button>
+                        </div>
+                        <span
+                          //  className="r20"
+                          className={isLightTheme ? "r20  light " : "r20  "}>
+                          Free Research Preview. Instruct.ai may produce
+                          inaccurate information about people, places, or facts.
+                          Instruct.ai Sep 26 Version
+                        </span>
+                      </div>
+                    )}	

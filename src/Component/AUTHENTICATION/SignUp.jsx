@@ -667,7 +667,7 @@ function SignUp() {
 
   return (
     <>
-      <div className="a111c44">
+      <div className="a111c44 ">
         <Container fluid>
           <Row className="m-0 p-0">
             <Col lg={1}>

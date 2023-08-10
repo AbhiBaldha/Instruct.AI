@@ -1,8 +1,16 @@
 import "../All.css";
 import { LuEdit, LuStars } from "react-icons/lu";
-import { BiMessageSquareEdit, BiMoon, BiSolidSun } from "react-icons/bi";
+import Hamburger from "hamburger-react";
+
+import {
+  BiEdit,
+  BiMessageSquareEdit,
+  BiMoon,
+  BiSolidSun,
+} from "react-icons/bi";
 import { Line } from "react-chartjs-2";
 import { IoMdLock } from "react-icons/io";
+import { RiMenu2Fill } from "react-icons/ri";
 import { ImFilesEmpty } from "react-icons/im";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { TiTick } from "react-icons/ti";
@@ -30,7 +38,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import logo from "../Image/1.png";
 import logo12 from "../Image/12.png";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import ProgressBar from "react-bootstrap/ProgressBar";
 
 // ==============================
@@ -52,9 +60,18 @@ import { MDBProgress, MDBProgressBar } from "mdb-react-ui-kit";
 import CopyToClipboard from "react-copy-to-clipboard";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { Dropdown } from "bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import { Chat } from "./Chat";
 
 // ==============================
+
 function Main() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const [CopyALlCOde, setCopyALlCOde] = useState([]);
   const [isActivebutton, setIsActivebutton] = useState(false);
   const [EditActive, setEditActive] = useState(false);
@@ -749,763 +766,782 @@ function Main() {
 
   return (
     <>
-      <div
-        //  className="container"
-        className={
-          isLightTheme ? "containeramain light" : "containeramain dark"
-        }
-      >
-        <div className="mainpart">
-          <div
-            className={isLightTheme ? "LeftPart light" : "LeftPart dark"}
-
-            //  className="LeftPart"
-          >
-            <div
-              //  className="l1"
-              className={isLightTheme ? "l1 light" : "l1 dark"}
-            >
-              {/* <h2>INSTRUCT AI</h2> */}
-              {isLightTheme ? (
-                <img className="l1a" src={logo12} alt=";logo" />
-              ) : (
-                <img className="l1a" src={logo} alt=";logo" />
-              )}
-            </div>
-            {/* ----------------------------------------- */}
-            <div
-              // className="l5"
-              className={isLightTheme ? "l5 light" : "l5"}
-            >
-              {/* ----------------------------- */}
-              {RoomsearchHistoryData?.data?.length > 0 ? (
-                RoomsearchHistoryData?.data?.map((val) => {
-                  console.log(
-                    "valueAASA12324",
-                    RoomsearchHistoryData?.data?.length
-                  );
-
-                  if (val?._id === 1) {
-                    // Render data for _id 1
-                    console.log("valueAASA", val);
-
-                    return (
-                      <>
-                        <div className="day1">Today</div>
-                        {val?.data?.length > 0 &&
-                          val?.data?.map((valuea) => {
-                            const isActive = valuea?._id === activeId;
-
-                            console.log("abhi", valuea?._id);
-                            console.log("abhi1", activeId);
-                            console.log("sdsfsdccbgfsras", isActive);
-                            const isActive1 = valuea?._id === activeId;
-                            const titleSelect = valuea?.title;
-                            return (
-                              <div
-                                key={valuea?._id}
-                                className={`${
-                                  isLightTheme ? "L2 light" : "L2 dark"
-                                } ${isActive ? "activehistorydark" : ""} ${
-                                  isActive1 ? "activehistorylight" : ""
-                                }`}
-                              >
-                                <div
-                                  onClick={() => {
-                                    handleNavigation("history");
-                                    handleL2Click(valuea?._id);
-
-                                    setfget_historyRoom_by_id(valuea?._id);
-                                    console.log("abhi2", valuea?._id);
-                                  }}
-                                  className={
-                                    isLightTheme ? "l3 light" : "l3 dark"
-                                  }
-                                >
-                                  <LuStars />
-                                </div>
-                                <div className="l4">
-                                  {/* <input
-                                    className="r14ainput"
-                                    type="text"
-                                    placeholder={valuea?.title}
-                                  /> */}
-                                  {/* {valuea?.title} */}
-                                  {isTitleEditing &&
-                                  StoreClickedIdOnly === valuea?._id ? (
-                                    <input
-                                      className="r14ainput"
-                                      type="text"
-                                      placeholder={valuea?.title}
-                                      value={Title}
-                                      readOnly={!isTitleEditing}
-                                      onChange={handleOnChange}
-                                    />
-                                  ) : (
-                                    <div
-                                      onClick={() => {
-                                        setbuttonActive(false);
-
-                                        handleNavigation("history");
-                                        handleL2Click(valuea?._id);
-                                        setfget_historyRoom_by_id(valuea?._id);
-                                        console.log("abhi3", valuea?._id);
-                                        setIsTitleEditing(false);
-                                      }}
-                                      className="l4"
-                                    >
-                                      {valuea?.title}
-                                    </div>
-                                  )}
-                                </div>
-                                {isActive && !buttonActive ? (
-                                  <BiMessageSquareEdit
-                                    className="logoclass"
-                                    onClick={() => {
-                                      setIsTitleEditing(!isTitleEditing);
-                                      setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      setTitle(valuea?.title);
-                                      setbuttonActive(true);
-                                      // setActiveId("");
-                                      // setIsActive(false);
-                                    }}
-                                  />
-                                ) : null}
-                                {isActive && !buttonActive ? (
-                                  <AiOutlineDelete
-                                    onClick={() => {
-                                      console.log("jeetlodo");
-                                      HistoryDelete(valuea?._id);
-                                    }}
-                                    className="logoclass"
-                                  />
-                                ) : null}
-                                {buttonActive && isActive ? (
-                                  <BsCheckLg
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      HistoryUpdate(valuea?._id);
-                                      // setActiveId(valuea?._id);
-                                      // setbuttonActive(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : // <img
-                                //   src={right}
-                                //   alt="asdas"
-                                //   className="logoclassWright"
-                                // />
-                                null}{" "}
-                                {buttonActive && isActive ? (
-                                  <RxCross2
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      setActiveId(valuea?._id);
-                                      setbuttonActive(false);
-                                      setIsTitleEditing(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : null}
-                              </div>
-                            );
-                          })}
-                      </>
-                    );
-                  } else if (val?._id === 2) {
-                    // Render data for _id 1
-                    console.log("valueAASA", val);
-
-                    return (
-                      <>
-                        <div className="day1">Tommorow</div>
-
-                        {val?.data?.length > 0 &&
-                          val?.data?.map((valuea) => {
-                            const isActive = valuea?._id === activeId;
-
-                            console.log("abhi", valuea?._id);
-                            console.log("abhi1", activeId);
-                            console.log("sdsfsdccbgfsras", isActive);
-                            const isActive1 = valuea?._id === activeId;
-                            const titleSelect = valuea?.title;
-                            return (
-                              <div
-                                key={valuea?._id}
-                                className={`${
-                                  isLightTheme ? "L2 light" : "L2 dark"
-                                } ${isActive ? "activehistorydark" : ""} ${
-                                  isActive1 ? "activehistorylight" : ""
-                                }`}
-                              >
-                                <div
-                                  onClick={() => {
-                                    handleNavigation("history");
-                                    handleL2Click(valuea?._id);
-
-                                    setfget_historyRoom_by_id(valuea?._id);
-                                    console.log("abhi2", valuea?._id);
-                                  }}
-                                  className={
-                                    isLightTheme ? "l3 light" : "l3 dark"
-                                  }
-                                >
-                                  <LuStars />
-                                </div>
-                                <div className="l4">
-                                  {/* <input
-                                    className="r14ainput"
-                                    type="text"
-                                    placeholder={valuea?.title}
-                                  /> */}
-                                  {/* {valuea?.title} */}
-                                  {isTitleEditing &&
-                                  StoreClickedIdOnly === valuea?._id ? (
-                                    <input
-                                      className="r14ainput"
-                                      type="text"
-                                      placeholder={valuea?.title}
-                                      value={Title}
-                                      readOnly={!isTitleEditing}
-                                      onChange={handleOnChange}
-                                    />
-                                  ) : (
-                                    <div
-                                      onClick={() => {
-                                        setbuttonActive(false);
-
-                                        handleNavigation("history");
-                                        handleL2Click(valuea?._id);
-                                        setfget_historyRoom_by_id(valuea?._id);
-                                        console.log("abhi3", valuea?._id);
-                                        setIsTitleEditing(false);
-                                      }}
-                                      className="l4"
-                                    >
-                                      {valuea?.title}
-                                    </div>
-                                  )}
-                                </div>
-                                {isActive && !buttonActive ? (
-                                  <BiMessageSquareEdit
-                                    className="logoclass"
-                                    onClick={() => {
-                                      setIsTitleEditing(!isTitleEditing);
-                                      setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      setTitle(valuea?.title);
-                                      setbuttonActive(true);
-                                      // setActiveId("");
-                                      // setIsActive(false);
-                                    }}
-                                  />
-                                ) : null}
-                                {isActive && !buttonActive ? (
-                                  <AiOutlineDelete
-                                    onClick={() => {
-                                      HistoryDelete(valuea?._id);
-                                    }}
-                                    className="logoclass"
-                                  />
-                                ) : null}
-                                {buttonActive && isActive ? (
-                                  <BsCheckLg
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      HistoryUpdate(valuea?._id);
-                                      // setActiveId(valuea?._id);
-                                      // setbuttonActive(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : // <img
-                                //   src={right}
-                                //   alt="asdas"
-                                //   className="logoclassWright"
-                                // />
-                                null}{" "}
-                                {buttonActive && isActive ? (
-                                  <RxCross2
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      setActiveId(valuea?._id);
-                                      setbuttonActive(false);
-                                      setIsTitleEditing(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : null}
-                              </div>
-                            );
-                          })}
-                      </>
-                    );
-                  } else if (val?._id === 7) {
-                    // Render data for _id 1
-                    console.log("valueAASA", val);
-
-                    return (
-                      <>
-                        <div className="day1">a week ago</div>
-
-                        {val?.data?.length > 0 &&
-                          val?.data?.map((valuea) => {
-                            const isActive = valuea?._id === activeId;
-
-                            console.log("abhi", valuea?._id);
-                            console.log("abhi1", activeId);
-                            console.log("sdsfsdccbgfsras", isActive);
-                            const isActive1 = valuea?._id === activeId;
-                            const titleSelect = valuea?.title;
-                            return (
-                              <div
-                                key={valuea?._id}
-                                className={`${
-                                  isLightTheme ? "L2 light" : "L2 dark"
-                                } ${isActive ? "activehistorydark" : ""} ${
-                                  isActive1 ? "activehistorylight" : ""
-                                }`}
-                              >
-                                <div
-                                  onClick={() => {
-                                    handleNavigation("history");
-                                    handleL2Click(valuea?._id);
-
-                                    setfget_historyRoom_by_id(valuea?._id);
-                                    console.log("abhi2", valuea?._id);
-                                    setIsNewChatClicked(false);
-                                  }}
-                                  className={
-                                    isLightTheme ? "l3 light" : "l3 dark"
-                                  }
-                                >
-                                  <LuStars />
-                                </div>
-                                <div className="l4">
-                                  {/* <input
-                                    className="r14ainput"
-                                    type="text"
-                                    placeholder={valuea?.title}
-                                  /> */}
-                                  {/* {valuea?.title} */}
-                                  {isTitleEditing &&
-                                  StoreClickedIdOnly === valuea?._id ? (
-                                    <input
-                                      className="r14ainput"
-                                      type="text"
-                                      placeholder={valuea?.title}
-                                      value={Title}
-                                      readOnly={!isTitleEditing}
-                                      onChange={handleOnChange}
-                                    />
-                                  ) : (
-                                    <div
-                                      onClick={() => {
-                                        // setbuttonActive(false);
-
-                                        handleNavigation("history");
-                                        handleL2Click(valuea?._id);
-                                        setfget_historyRoom_by_id(valuea?._id);
-                                        console.log("abhi3", valuea?._id);
-                                        setIsTitleEditing(false);
-                                      }}
-                                      className="l4"
-                                    >
-                                      {valuea?.title}
-                                    </div>
-                                  )}
-                                </div>
-                                {isActive && !buttonActive ? (
-                                  <BiMessageSquareEdit
-                                    className="logoclass"
-                                    onClick={() => {
-                                      setIsTitleEditing(!isTitleEditing);
-                                      setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      setTitle(valuea?.title);
-                                      setbuttonActive(true);
-                                      // setActiveId("");
-                                      // setIsActive(false);
-                                    }}
-                                  />
-                                ) : null}
-                                {isActive && !buttonActive ? (
-                                  <AiOutlineDelete
-                                    onClick={() => {
-                                      HistoryDelete(valuea?._id);
-                                    }}
-                                    className="logoclass"
-                                  />
-                                ) : null}
-                                {buttonActive && isActive ? (
-                                  <BsCheckLg
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      HistoryUpdate(valuea?._id);
-                                      // setActiveId(valuea?._id);
-                                      // setbuttonActive(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : // <img
-                                //   src={right}
-                                //   alt="asdas"
-                                //   className="logoclassWright"
-                                // />
-                                null}{" "}
-                                {buttonActive && isActive ? (
-                                  <RxCross2
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      setActiveId(valuea?._id);
-                                      setbuttonActive(false);
-                                      setIsTitleEditing(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : null}
-                              </div>
-                            );
-                          })}
-                      </>
-                    );
-                  } else if (val?._id === 14) {
-                    // Render data for _id 1
-                    console.log("valueAASA", val);
-
-                    return (
-                      <>
-                        <div className="day1">15 days ago</div>
-                        {val?.data?.length > 0 &&
-                          val?.data?.map((valuea) => {
-                            const isActive = valuea?._id === activeId;
-
-                            console.log("abhi", valuea?._id);
-                            console.log("abhi1", activeId);
-                            console.log("sdsfsdccbgfsras", isActive);
-                            const isActive1 = valuea?._id === activeId;
-                            const titleSelect = valuea?.title;
-                            return (
-                              <div
-                                key={valuea?._id}
-                                className={`${
-                                  isLightTheme ? "L2 light" : "L2 dark"
-                                } ${isActive ? "activehistorydark" : ""} ${
-                                  isActive1 ? "activehistorylight" : ""
-                                }`}
-                              >
-                                <div
-                                  onClick={() => {
-                                    setIsNewChatClicked(false);
-
-                                    handleNavigation("history");
-                                    handleL2Click(valuea?._id);
-
-                                    setfget_historyRoom_by_id(valuea?._id);
-                                    console.log("abhi2", valuea?._id);
-                                  }}
-                                  className={
-                                    isLightTheme ? "l3 light" : "l3 dark"
-                                  }
-                                >
-                                  <LuStars />
-                                </div>
-                                <div className="l4">
-                                  {/* <input
-                                    className="r14ainput"
-                                    type="text"
-                                    placeholder={valuea?.title}
-                                  /> */}
-                                  {/* {valuea?.title} */}
-                                  {isTitleEditing &&
-                                  StoreClickedIdOnly === valuea?._id ? (
-                                    <input
-                                      className="r14ainput"
-                                      type="text"
-                                      placeholder={valuea?.title}
-                                      value={Title}
-                                      readOnly={!isTitleEditing}
-                                      onChange={handleOnChange}
-                                    />
-                                  ) : (
-                                    <div
-                                      onClick={() => {
-                                        setbuttonActive(false);
-
-                                        handleNavigation("history");
-                                        handleL2Click(valuea?._id);
-                                        setfget_historyRoom_by_id(valuea?._id);
-                                        console.log("abhi3", valuea?._id);
-                                        setIsTitleEditing(false);
-                                      }}
-                                      className="l4"
-                                    >
-                                      {valuea?.title}
-                                    </div>
-                                  )}
-                                </div>
-                                {isActive && !buttonActive ? (
-                                  <BiMessageSquareEdit
-                                    className="logoclass"
-                                    onClick={() => {
-                                      setIsTitleEditing(!isTitleEditing);
-                                      setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      setTitle(valuea?.title);
-                                      setbuttonActive(true);
-                                      // setActiveId("");
-                                      // setIsActive(false);
-                                    }}
-                                  />
-                                ) : null}
-                                {isActive && !buttonActive ? (
-                                  <AiOutlineDelete
-                                    onClick={() => {
-                                      HistoryDelete(valuea?._id);
-                                    }}
-                                    className="logoclass"
-                                  />
-                                ) : null}
-                                {buttonActive && isActive ? (
-                                  <BsCheckLg
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      HistoryUpdate(valuea?._id);
-                                      // setActiveId(valuea?._id);
-                                      // setbuttonActive(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : // <img
-                                //   src={right}
-                                //   alt="asdas"
-                                //   className="logoclassWright"
-                                // />
-                                null}{" "}
-                                {buttonActive && isActive ? (
-                                  <RxCross2
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      setActiveId(valuea?._id);
-                                      setbuttonActive(false);
-                                      setIsTitleEditing(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : null}
-                              </div>
-                            );
-                          })}
-                      </>
-                    );
-                  } else if (val?._id === 30) {
-                    // Render data for _id 1
-                    console.log("valueAASA", val);
-
-                    return (
-                      <>
-                        <div className="day1">a Month ago</div>
-
-                        {val?.data?.length > 0 &&
-                          val?.data?.map((valuea) => {
-                            const isActive = valuea?._id === activeId;
-
-                            console.log("abhi", valuea?._id);
-                            console.log("abhi1", activeId);
-                            console.log("sdsfsdccbgfsras", isActive);
-                            const isActive1 = valuea?._id === activeId;
-                            const titleSelect = valuea?.title;
-                            return (
-                              <div
-                                key={valuea?._id}
-                                className={`${
-                                  isLightTheme ? "L2 light" : "L2 dark"
-                                } ${isActive ? "activehistorydark" : ""} ${
-                                  isActive1 ? "activehistorylight" : ""
-                                }`}
-                              >
-                                <div
-                                  onClick={() => {
-                                    handleNavigation("history");
-                                    handleL2Click(valuea?._id);
-
-                                    setfget_historyRoom_by_id(valuea?._id);
-                                    console.log("abhi2", valuea?._id);
-                                  }}
-                                  className={
-                                    isLightTheme ? "l3 light" : "l3 dark"
-                                  }
-                                >
-                                  <LuStars />
-                                </div>
-                                <div className="l4">
-                                  {/* <input
-                                    className="r14ainput"
-                                    type="text"
-                                    placeholder={valuea?.title}
-                                  /> */}
-                                  {/* {valuea?.title} */}
-                                  {isTitleEditing &&
-                                  StoreClickedIdOnly === valuea?._id ? (
-                                    <input
-                                      className="r14ainput"
-                                      type="text"
-                                      placeholder={valuea?.title}
-                                      value={Title}
-                                      readOnly={!isTitleEditing}
-                                      onChange={handleOnChange}
-                                    />
-                                  ) : (
-                                    <div
-                                      onClick={() => {
-                                        setbuttonActive(false);
-
-                                        handleNavigation("history");
-                                        handleL2Click(valuea?._id);
-                                        setfget_historyRoom_by_id(valuea?._id);
-                                        console.log("abhi3", valuea?._id);
-                                        setIsTitleEditing(false);
-                                      }}
-                                      className="l4"
-                                    >
-                                      {valuea?.title}
-                                    </div>
-                                  )}
-                                </div>
-                                {isActive && !buttonActive ? (
-                                  <BiMessageSquareEdit
-                                    className="logoclass"
-                                    onClick={() => {
-                                      setIsTitleEditing(!isTitleEditing);
-                                      setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      setTitle(valuea?.title);
-                                      setbuttonActive(true);
-                                      // setActiveId("");
-                                      // setIsActive(false);
-                                    }}
-                                  />
-                                ) : null}
-                                {isActive && !buttonActive ? (
-                                  <AiOutlineDelete
-                                    onClick={() => {
-                                      HistoryDelete(valuea?._id);
-                                    }}
-                                    className="logoclass"
-                                  />
-                                ) : null}
-                                {buttonActive && isActive ? (
-                                  <BsCheckLg
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      HistoryUpdate(valuea?._id);
-                                      // setActiveId(valuea?._id);
-                                      // setbuttonActive(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : // <img
-                                //   src={right}
-                                //   alt="asdas"
-                                //   className="logoclassWright"
-                                // />
-                                null}{" "}
-                                {buttonActive && isActive ? (
-                                  <RxCross2
-                                    className="logoclassWright"
-                                    onClick={() => {
-                                      setActiveId(valuea?._id);
-                                      setbuttonActive(false);
-                                      setIsTitleEditing(false);
-                                      // setIsTitleEditing(!isTitleEditing);
-                                      // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
-                                      // setTitle(valuea?.title);
-                                    }}
-                                  />
-                                ) : null}
-                              </div>
-                            );
-                          })}
-                      </>
-                    );
-                  }
-                })
-              ) : (
-                <div className="a1">
-                  <center>
-                    <div className="a2">
-                      <div className="a3">
-                        <h1>
-                          <ImFilesEmpty />
-                        </h1>
-                      </div>
-                      <div className="a4">No History Available .</div>
-                      <div className="a4">Please Create a new Room .</div>
-                    </div>
-                  </center>
-                </div>
-              )}
-
-              {/* ----------------------------- */}
-            </div>
-            {/* ----------------------------------------- */}
-
-            <div
-              //  className="l6"
-              className={isLightTheme ? "l6 light" : "l6 dark"}
-            >
-              <div
-                //  className="l17"
-                className={isLightTheme ? "l17 light" : "l17 dark"}
-              >
+      <Container fluid>
+        <div
+          //  className="container"
+          className={
+            isLightTheme ? "containeramain light" : "containeramain dark"
+          }>
+          <div className="mainpart">
+            <Row className="m-0 p-0">
+              <Col lg={4} xl={3} className="d-lg-block d-none">
                 <div
-                  //  className="l12"
-                  className={isLightTheme ? "l12 light" : "l12 dark"}
+                  className={isLightTheme ? "LeftPart light" : "LeftPart dark"}
+
+                  //  className="LeftPart"
                 >
-                  Credits
-                </div>
-                {/* <div
+                  {/* <Row> */}
+                  {/* <Col lg={2}> */}
+                  <div
+                    //  className="l1"
+                    className={isLightTheme ? "l1 light" : "l1 dark"}>
+                    {/* <h2>INSTRUCT AI</h2> */}
+                    {isLightTheme ? (
+                      <img className="l1a" src={logo12} alt=";logo" />
+                    ) : (
+                      <img className="l1a" src={logo} alt=";logo" />
+                    )}
+                  </div>
+                  {/* </Col> */}
+
+                  {/* ----------------------------------------- */}
+                  {/* <Col lg={7}> */}
+                  <div
+                    // className="l5"
+                    className={isLightTheme ? "l5 light" : "l5"}>
+                    {/* ----------------------------- */}
+                    {RoomsearchHistoryData?.data?.length > 0 ? (
+                      RoomsearchHistoryData?.data?.map((val) => {
+                        console.log(
+                          "valueAASA12324",
+                          RoomsearchHistoryData?.data?.length
+                        );
+
+                        if (val?._id === 1) {
+                          // Render data for _id 1
+                          console.log("valueAASA", val);
+
+                          return (
+                            <>
+                              <div className="day1">Today</div>
+                              {val?.data?.length > 0 &&
+                                val?.data?.map((valuea) => {
+                                  const isActive = valuea?._id === activeId;
+
+                                  console.log("abhi", valuea?._id);
+                                  console.log("abhi1", activeId);
+                                  console.log("sdsfsdccbgfsras", isActive);
+                                  const isActive1 = valuea?._id === activeId;
+                                  const titleSelect = valuea?.title;
+                                  return (
+                                    <div
+                                      key={valuea?._id}
+                                      className={`${
+                                        isLightTheme ? "L2 light" : "L2 dark"
+                                      } ${
+                                        isActive ? "activehistorydark" : ""
+                                      } ${
+                                        isActive1 ? "activehistorylight" : ""
+                                      }`}>
+                                      <div
+                                        onClick={() => {
+                                          handleNavigation("history");
+                                          handleL2Click(valuea?._id);
+
+                                          setfget_historyRoom_by_id(
+                                            valuea?._id
+                                          );
+                                          console.log("abhi2", valuea?._id);
+                                        }}
+                                        className={
+                                          isLightTheme ? "l3 light" : "l3 dark"
+                                        }>
+                                        <LuStars />
+                                      </div>
+                                      <div className="l4">
+                                        {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                        {/* {valuea?.title} */}
+                                        {isTitleEditing &&
+                                        StoreClickedIdOnly === valuea?._id ? (
+                                          <input
+                                            className="r14ainput"
+                                            type="text"
+                                            placeholder={valuea?.title}
+                                            value={Title}
+                                            readOnly={!isTitleEditing}
+                                            onChange={handleOnChange}
+                                          />
+                                        ) : (
+                                          <div
+                                            onClick={() => {
+                                              setbuttonActive(false);
+
+                                              handleNavigation("history");
+                                              handleL2Click(valuea?._id);
+                                              setfget_historyRoom_by_id(
+                                                valuea?._id
+                                              );
+                                              console.log("abhi3", valuea?._id);
+                                              setIsTitleEditing(false);
+                                            }}
+                                            className="l4">
+                                            {valuea?.title}
+                                          </div>
+                                        )}
+                                      </div>
+                                      {isActive && !buttonActive ? (
+                                        <BiMessageSquareEdit
+                                          className="logoclass"
+                                          onClick={() => {
+                                            setIsTitleEditing(!isTitleEditing);
+                                            setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            setTitle(valuea?.title);
+                                            setbuttonActive(true);
+                                            // setActiveId("");
+                                            // setIsActive(false);
+                                          }}
+                                        />
+                                      ) : null}
+                                      {isActive && !buttonActive ? (
+                                        <AiOutlineDelete
+                                          onClick={() => {
+                                            console.log("jeetlodo");
+                                            HistoryDelete(valuea?._id);
+                                          }}
+                                          className="logoclass"
+                                        />
+                                      ) : null}
+                                      {buttonActive && isActive ? (
+                                        <BsCheckLg
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            HistoryUpdate(valuea?._id);
+                                            // setActiveId(valuea?._id);
+                                            // setbuttonActive(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : // <img
+                                      //   src={right}
+                                      //   alt="asdas"
+                                      //   className="logoclassWright"
+                                      // />
+                                      null}{" "}
+                                      {buttonActive && isActive ? (
+                                        <RxCross2
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            setActiveId(valuea?._id);
+                                            setbuttonActive(false);
+                                            setIsTitleEditing(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : null}
+                                    </div>
+                                  );
+                                })}
+                            </>
+                          );
+                        } else if (val?._id === 2) {
+                          // Render data for _id 1
+                          console.log("valueAASA", val);
+
+                          return (
+                            <>
+                              <div className="day1">Tommorow</div>
+
+                              {val?.data?.length > 0 &&
+                                val?.data?.map((valuea) => {
+                                  const isActive = valuea?._id === activeId;
+
+                                  console.log("abhi", valuea?._id);
+                                  console.log("abhi1", activeId);
+                                  console.log("sdsfsdccbgfsras", isActive);
+                                  const isActive1 = valuea?._id === activeId;
+                                  const titleSelect = valuea?.title;
+                                  return (
+                                    <div
+                                      key={valuea?._id}
+                                      className={`${
+                                        isLightTheme ? "L2 light" : "L2 dark"
+                                      } ${
+                                        isActive ? "activehistorydark" : ""
+                                      } ${
+                                        isActive1 ? "activehistorylight" : ""
+                                      }`}>
+                                      <div
+                                        onClick={() => {
+                                          handleNavigation("history");
+                                          handleL2Click(valuea?._id);
+
+                                          setfget_historyRoom_by_id(
+                                            valuea?._id
+                                          );
+                                          console.log("abhi2", valuea?._id);
+                                        }}
+                                        className={
+                                          isLightTheme ? "l3 light" : "l3 dark"
+                                        }>
+                                        <LuStars />
+                                      </div>
+                                      <div className="l4">
+                                        {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                        {/* {valuea?.title} */}
+                                        {isTitleEditing &&
+                                        StoreClickedIdOnly === valuea?._id ? (
+                                          <input
+                                            className="r14ainput"
+                                            type="text"
+                                            placeholder={valuea?.title}
+                                            value={Title}
+                                            readOnly={!isTitleEditing}
+                                            onChange={handleOnChange}
+                                          />
+                                        ) : (
+                                          <div
+                                            onClick={() => {
+                                              setbuttonActive(false);
+
+                                              handleNavigation("history");
+                                              handleL2Click(valuea?._id);
+                                              setfget_historyRoom_by_id(
+                                                valuea?._id
+                                              );
+                                              console.log("abhi3", valuea?._id);
+                                              setIsTitleEditing(false);
+                                            }}
+                                            className="l4">
+                                            {valuea?.title}
+                                          </div>
+                                        )}
+                                      </div>
+                                      {isActive && !buttonActive ? (
+                                        <BiMessageSquareEdit
+                                          className="logoclass"
+                                          onClick={() => {
+                                            setIsTitleEditing(!isTitleEditing);
+                                            setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            setTitle(valuea?.title);
+                                            setbuttonActive(true);
+                                            // setActiveId("");
+                                            // setIsActive(false);
+                                          }}
+                                        />
+                                      ) : null}
+                                      {isActive && !buttonActive ? (
+                                        <AiOutlineDelete
+                                          onClick={() => {
+                                            HistoryDelete(valuea?._id);
+                                          }}
+                                          className="logoclass"
+                                        />
+                                      ) : null}
+                                      {buttonActive && isActive ? (
+                                        <BsCheckLg
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            HistoryUpdate(valuea?._id);
+                                            // setActiveId(valuea?._id);
+                                            // setbuttonActive(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : // <img
+                                      //   src={right}
+                                      //   alt="asdas"
+                                      //   className="logoclassWright"
+                                      // />
+                                      null}{" "}
+                                      {buttonActive && isActive ? (
+                                        <RxCross2
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            setActiveId(valuea?._id);
+                                            setbuttonActive(false);
+                                            setIsTitleEditing(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : null}
+                                    </div>
+                                  );
+                                })}
+                            </>
+                          );
+                        } else if (val?._id === 7) {
+                          // Render data for _id 1
+                          console.log("valueAASA", val);
+
+                          return (
+                            <>
+                              <div className="day1">a week ago</div>
+
+                              {val?.data?.length > 0 &&
+                                val?.data?.map((valuea) => {
+                                  const isActive = valuea?._id === activeId;
+
+                                  console.log("abhi", valuea?._id);
+                                  console.log("abhi1", activeId);
+                                  console.log("sdsfsdccbgfsras", isActive);
+                                  const isActive1 = valuea?._id === activeId;
+                                  const titleSelect = valuea?.title;
+                                  return (
+                                    <div
+                                      key={valuea?._id}
+                                      className={`${
+                                        isLightTheme ? "L2 light" : "L2 dark"
+                                      } ${
+                                        isActive ? "activehistorydark" : ""
+                                      } ${
+                                        isActive1 ? "activehistorylight" : ""
+                                      }`}>
+                                      <div
+                                        onClick={() => {
+                                          handleNavigation("history");
+                                          handleL2Click(valuea?._id);
+
+                                          setfget_historyRoom_by_id(
+                                            valuea?._id
+                                          );
+                                          console.log("abhi2", valuea?._id);
+                                          setIsNewChatClicked(false);
+                                        }}
+                                        className={
+                                          isLightTheme ? "l3 light" : "l3 dark"
+                                        }>
+                                        <LuStars />
+                                      </div>
+                                      <div className="l4">
+                                        {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                        {/* {valuea?.title} */}
+                                        {isTitleEditing &&
+                                        StoreClickedIdOnly === valuea?._id ? (
+                                          <input
+                                            className="r14ainput"
+                                            type="text"
+                                            placeholder={valuea?.title}
+                                            value={Title}
+                                            readOnly={!isTitleEditing}
+                                            onChange={handleOnChange}
+                                          />
+                                        ) : (
+                                          <div
+                                            onClick={() => {
+                                              // setbuttonActive(false);
+
+                                              handleNavigation("history");
+                                              handleL2Click(valuea?._id);
+                                              setfget_historyRoom_by_id(
+                                                valuea?._id
+                                              );
+                                              console.log("abhi3", valuea?._id);
+                                              setIsTitleEditing(false);
+                                            }}
+                                            className="l4">
+                                            {valuea?.title}
+                                          </div>
+                                        )}
+                                      </div>
+                                      {isActive && !buttonActive ? (
+                                        <BiMessageSquareEdit
+                                          className="logoclass"
+                                          onClick={() => {
+                                            setIsTitleEditing(!isTitleEditing);
+                                            setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            setTitle(valuea?.title);
+                                            setbuttonActive(true);
+                                            // setActiveId("");
+                                            // setIsActive(false);
+                                          }}
+                                        />
+                                      ) : null}
+                                      {isActive && !buttonActive ? (
+                                        <AiOutlineDelete
+                                          onClick={() => {
+                                            HistoryDelete(valuea?._id);
+                                          }}
+                                          className="logoclass"
+                                        />
+                                      ) : null}
+                                      {buttonActive && isActive ? (
+                                        <BsCheckLg
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            HistoryUpdate(valuea?._id);
+                                            // setActiveId(valuea?._id);
+                                            // setbuttonActive(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : // <img
+                                      //   src={right}
+                                      //   alt="asdas"
+                                      //   className="logoclassWright"
+                                      // />
+                                      null}{" "}
+                                      {buttonActive && isActive ? (
+                                        <RxCross2
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            setActiveId(valuea?._id);
+                                            setbuttonActive(false);
+                                            setIsTitleEditing(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : null}
+                                    </div>
+                                  );
+                                })}
+                            </>
+                          );
+                        } else if (val?._id === 14) {
+                          // Render data for _id 1
+                          console.log("valueAASA", val);
+
+                          return (
+                            <>
+                              <div className="day1">15 days ago</div>
+                              {val?.data?.length > 0 &&
+                                val?.data?.map((valuea) => {
+                                  const isActive = valuea?._id === activeId;
+
+                                  console.log("abhi", valuea?._id);
+                                  console.log("abhi1", activeId);
+                                  console.log("sdsfsdccbgfsras", isActive);
+                                  const isActive1 = valuea?._id === activeId;
+                                  const titleSelect = valuea?.title;
+                                  return (
+                                    <div
+                                      key={valuea?._id}
+                                      className={`${
+                                        isLightTheme ? "L2 light" : "L2 dark"
+                                      } ${
+                                        isActive ? "activehistorydark" : ""
+                                      } ${
+                                        isActive1 ? "activehistorylight" : ""
+                                      }`}>
+                                      <div
+                                        onClick={() => {
+                                          setIsNewChatClicked(false);
+
+                                          handleNavigation("history");
+                                          handleL2Click(valuea?._id);
+
+                                          setfget_historyRoom_by_id(
+                                            valuea?._id
+                                          );
+                                          console.log("abhi2", valuea?._id);
+                                        }}
+                                        className={
+                                          isLightTheme ? "l3 light" : "l3 dark"
+                                        }>
+                                        <LuStars />
+                                      </div>
+                                      <div className="l4">
+                                        {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                        {/* {valuea?.title} */}
+                                        {isTitleEditing &&
+                                        StoreClickedIdOnly === valuea?._id ? (
+                                          <input
+                                            className="r14ainput"
+                                            type="text"
+                                            placeholder={valuea?.title}
+                                            value={Title}
+                                            readOnly={!isTitleEditing}
+                                            onChange={handleOnChange}
+                                          />
+                                        ) : (
+                                          <div
+                                            onClick={() => {
+                                              setbuttonActive(false);
+
+                                              handleNavigation("history");
+                                              handleL2Click(valuea?._id);
+                                              setfget_historyRoom_by_id(
+                                                valuea?._id
+                                              );
+                                              console.log("abhi3", valuea?._id);
+                                              setIsTitleEditing(false);
+                                            }}
+                                            className="l4">
+                                            {valuea?.title}
+                                          </div>
+                                        )}
+                                      </div>
+                                      {isActive && !buttonActive ? (
+                                        <BiMessageSquareEdit
+                                          className="logoclass"
+                                          onClick={() => {
+                                            setIsTitleEditing(!isTitleEditing);
+                                            setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            setTitle(valuea?.title);
+                                            setbuttonActive(true);
+                                            // setActiveId("");
+                                            // setIsActive(false);
+                                          }}
+                                        />
+                                      ) : null}
+                                      {isActive && !buttonActive ? (
+                                        <AiOutlineDelete
+                                          onClick={() => {
+                                            HistoryDelete(valuea?._id);
+                                          }}
+                                          className="logoclass"
+                                        />
+                                      ) : null}
+                                      {buttonActive && isActive ? (
+                                        <BsCheckLg
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            HistoryUpdate(valuea?._id);
+                                            // setActiveId(valuea?._id);
+                                            // setbuttonActive(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : // <img
+                                      //   src={right}
+                                      //   alt="asdas"
+                                      //   className="logoclassWright"
+                                      // />
+                                      null}{" "}
+                                      {buttonActive && isActive ? (
+                                        <RxCross2
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            setActiveId(valuea?._id);
+                                            setbuttonActive(false);
+                                            setIsTitleEditing(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : null}
+                                    </div>
+                                  );
+                                })}
+                            </>
+                          );
+                        } else if (val?._id === 30) {
+                          // Render data for _id 1
+                          console.log("valueAASA", val);
+
+                          return (
+                            <>
+                              <div className="day1">a Month ago</div>
+
+                              {val?.data?.length > 0 &&
+                                val?.data?.map((valuea) => {
+                                  const isActive = valuea?._id === activeId;
+
+                                  console.log("abhi", valuea?._id);
+                                  console.log("abhi1", activeId);
+                                  console.log("sdsfsdccbgfsras", isActive);
+                                  const isActive1 = valuea?._id === activeId;
+                                  const titleSelect = valuea?.title;
+                                  return (
+                                    <div
+                                      key={valuea?._id}
+                                      className={`${
+                                        isLightTheme ? "L2 light" : "L2 dark"
+                                      } ${
+                                        isActive ? "activehistorydark" : ""
+                                      } ${
+                                        isActive1 ? "activehistorylight" : ""
+                                      }`}>
+                                      <div
+                                        onClick={() => {
+                                          handleNavigation("history");
+                                          handleL2Click(valuea?._id);
+
+                                          setfget_historyRoom_by_id(
+                                            valuea?._id
+                                          );
+                                          console.log("abhi2", valuea?._id);
+                                        }}
+                                        className={
+                                          isLightTheme ? "l3 light" : "l3 dark"
+                                        }>
+                                        <LuStars />
+                                      </div>
+                                      <div className="l4">
+                                        {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                        {/* {valuea?.title} */}
+                                        {isTitleEditing &&
+                                        StoreClickedIdOnly === valuea?._id ? (
+                                          <input
+                                            className="r14ainput"
+                                            type="text"
+                                            placeholder={valuea?.title}
+                                            value={Title}
+                                            readOnly={!isTitleEditing}
+                                            onChange={handleOnChange}
+                                          />
+                                        ) : (
+                                          <div
+                                            onClick={() => {
+                                              setbuttonActive(false);
+
+                                              handleNavigation("history");
+                                              handleL2Click(valuea?._id);
+                                              setfget_historyRoom_by_id(
+                                                valuea?._id
+                                              );
+                                              console.log("abhi3", valuea?._id);
+                                              setIsTitleEditing(false);
+                                            }}
+                                            className="l4">
+                                            {valuea?.title}
+                                          </div>
+                                        )}
+                                      </div>
+                                      {isActive && !buttonActive ? (
+                                        <BiMessageSquareEdit
+                                          className="logoclass"
+                                          onClick={() => {
+                                            setIsTitleEditing(!isTitleEditing);
+                                            setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            setTitle(valuea?.title);
+                                            setbuttonActive(true);
+                                            // setActiveId("");
+                                            // setIsActive(false);
+                                          }}
+                                        />
+                                      ) : null}
+                                      {isActive && !buttonActive ? (
+                                        <AiOutlineDelete
+                                          onClick={() => {
+                                            HistoryDelete(valuea?._id);
+                                          }}
+                                          className="logoclass"
+                                        />
+                                      ) : null}
+                                      {buttonActive && isActive ? (
+                                        <BsCheckLg
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            HistoryUpdate(valuea?._id);
+                                            // setActiveId(valuea?._id);
+                                            // setbuttonActive(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : // <img
+                                      //   src={right}
+                                      //   alt="asdas"
+                                      //   className="logoclassWright"
+                                      // />
+                                      null}{" "}
+                                      {buttonActive && isActive ? (
+                                        <RxCross2
+                                          className="logoclassWright"
+                                          onClick={() => {
+                                            setActiveId(valuea?._id);
+                                            setbuttonActive(false);
+                                            setIsTitleEditing(false);
+                                            // setIsTitleEditing(!isTitleEditing);
+                                            // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                            // setTitle(valuea?.title);
+                                          }}
+                                        />
+                                      ) : null}
+                                    </div>
+                                  );
+                                })}
+                            </>
+                          );
+                        }
+                      })
+                    ) : (
+                      <div className="a1">
+                        <center>
+                          <div className="a2">
+                            <div className="a3">
+                              <h1>
+                                <ImFilesEmpty />
+                              </h1>
+                            </div>
+                            <div className="a4">No History Available .</div>
+                            <div className="a4">Please Create a new Room .</div>
+                          </div>
+                        </center>
+                      </div>
+                    )}
+
+                    {/* ----------------------------- */}
+                  </div>
+                  {/* </Col> */}
+                  {/* ----------------------------------------- */}
+                  {/* <Col lg={3}> */}
+
+                  <div
+                    //  className="l6"
+                    className={isLightTheme ? "l6 light" : "l6 dark"}>
+                    <div
+                      //  className="l17"
+                      className={isLightTheme ? "l17 light" : "l17 dark"}>
+                      <div
+                        //  className="l12"
+                        className={isLightTheme ? "l12 light" : "l12 dark"}>
+                        Credits
+                      </div>
+                      {/* <div
                   //  className="l13"
                   className={isLightTheme ? "l13 light" : "l13"}>
                   <div
                     //  className="l14"
                     className={isLightTheme ? "l14 light" : "l14"}></div>
                 </div> */}
-                <ProgressBar className="prg1" now={progressPercentage} />
-                <div
-                  // className="l15"
-                  className={isLightTheme ? "l15 light" : "l15 dark"}
-                >
-                  {weeklyGraph?.data?.total_count}/{maxCount} credits used
-                </div>
-                <div className="l16">
-                  <BarChart width={260} height={185} data={data}>
-                    <XAxis dataKey="name" stroke="#8884d8" />
-                    <Tooltip contentStyle={tooltipStyles} />
-                    <Bar
-                      dataKey="uv"
-                      fill="#0062ff"
-                      barSize={15}
-                      radius={[10, 10, 0, 0]}
-                    />
-                  </BarChart>
-                </div>
-              </div>
-              {/* 
+                      <ProgressBar className="prg1" now={progressPercentage} />
+                      <div
+                        // className="l15"
+                        className={isLightTheme ? "l15 light" : "l15 dark"}>
+                        {weeklyGraph?.data?.total_count}/{maxCount} credits used
+                      </div>
+                      {/* jeetchart */}
+                      {/* <div className="l16">
+                        <BarChart width={260} height={185} data={data}>
+                          <XAxis dataKey="name" stroke="#8884d8" />
+                          <Tooltip contentStyle={tooltipStyles} />
+                          <Bar
+                            dataKey="uv"
+                            fill="#0062ff"
+                            barSize={15}
+                            radius={[10, 10, 0, 0]}
+                          />
+                        </BarChart>
+                      </div> */}
+                    </div>
+                    {/* 
             <div className="l7">
               <div className="l8">
                 {" "}
@@ -1515,16 +1551,23 @@ function Main() {
                 <div className="l11"></div>
               </div>
             </div> */}
-            </div>
-          </div>
-          <div
-            className={isLightTheme ? "RightPart light" : "RightPart dark"}
+                  </div>
+                  {/* </Col> */}
+                  {/* </Row> */}
+                </div>
+              </Col>
+              {/* lodooooo */}
+              <Col lg={8} xl={9} className="abhi m-0 p-0">
+                <div
+                  className={
+                    isLightTheme ? "RightPart light" : "RightPart dark"
+                  }
 
-            //  className="RightPart"
-          >
-            <div className="r1">
-              {/* ------------------------------------------ */}
-              {/* <div
+                  //  className="RightPart"
+                >
+                  <div className="r1">
+                    {/* ------------------------------------------ */}
+                    {/* <div
                 //  className="r2"
                 className={isLightTheme ? "r2 light" : "r2 dark"}>
                 <div className="r3">
@@ -1583,426 +1626,1308 @@ function Main() {
                   Submit
                 </div>
               </div> */}
-              {/* ------------------------------------------ */}
-              <div
-                //  className="r2"
-                className={isLightTheme ? "r2 light" : "r2 dark"}
-              >
-                <div
-                  // className="r3"
-                  className={isLightTheme ? "r3 light" : "r3 dark"}
-                  onClick={() => {
-                    newQuery();
-                    setfget_historyRoom_by_id("");
-                    setActiveId("");
-                  }}
-                >
-                  <div
-                    //  className="r3a"
-                    className={isLightTheme ? "r3a light" : "r3a "}
-                  >
-                    <IoAddCircleOutline />
-                  </div>
-                  <div
-                    //  className="r3b"
-                    className={isLightTheme ? "r3b light" : "r3b "}
-                  >
-                    New Chat
-                  </div>
-                  {/* <input className="r4" type="search" name="" id="" /> */}
-                </div>
-                <div
-                  //  className="r5"
-                  className={isLightTheme ? "r5 light" : "r5 dark"}
-                >
-                  <IoMdLock />
-                </div>{" "}
-                <div
-                  //  className="r5"
-                  className={isLightTheme ? "r5 light" : "r5 dark"}
-                >
-                  <AiOutlineInfoCircle />
-                </div>{" "}
-                <div
-                  // className="r5"
-                  className={isLightTheme ? "r5 light" : "r5 dark"}
-                  onClick={toggleTheme}
-                >
-                  {isLightTheme ? <BiMoon /> : <BiSolidSun />}
-                </div>
-                <div
-                  // onClick={toogleSignUppage}
-                  className={isLightTheme ? "r6 light" : "r6 dark"}
-                  onMouseEnter={toggleDropdown}
-                  onMouseLeave={toggleDropdown}
-                  //  className="r6"
-                >
-                  <img
-                    className={isLightTheme ? "r6 light" : "r6 dark"}
-                    src={UserProfile?.data?.profileImage}
-                    alt=""
-                  />
-                  {showDropdown && (
-                    <div className="dropdown opt">
-                      <ul className="opt13">
-                        <li className="opt15">
-                          <div className="opt16">
-                            <span className="opt18">
-                              <FaHandsClapping />
-                            </span>
-                            <span className="opt17"></span>
-                            Hi
-                            <span className="opt19">
-                              {" "}
-                              {UserProfile?.data?.userName}
-                            </span>
-                          </div>{" "}
-                        </li>
+                    {/* ------------------------------------------ */}
+                    <div className="p-lg-0 p-4 pb-0">
+                      <div
+                        //  className="r2"
+                        className={
+                          isLightTheme
+                            ? "r2 d-flex justify-content-lg-end align-items-center "
+                            : "r2 dark d-flex justify-content-lg-end align-items-center "
+                        }>
+                        <div className="r2a1 mt-lg-4 me-lg-5 p-4 d-flex justify-content-lg-end justify-content-between ">
+                          <div className="d-lg-none d-block">
+                            <div className="as12" onClick={handleShow}>
+                              <RiMenu2Fill />
+                            </div>
+                          </div>
+                          <Offcanvas show={show} onHide={handleClose}>
+                            <Offcanvas.Header closeButton>
+                              <Offcanvas.Title>Instruct Ai</Offcanvas.Title>
+                            </Offcanvas.Header>
+                            <Offcanvas.Body>
+                              <div
+                                className={
+                                  isLightTheme
+                                    ? "LeftPart w-100 light"
+                                    : "LeftPart dark"
+                                }
 
-                        <li className="opt11" onClick={() => performTask(1)}>
-                          <div className="opt14">Profile</div>
-                        </li>
-                        <li className="opt11" onClick={() => performTask(2)}>
-                          <div className="opt14">Task 2</div>
-                        </li>
-                        <li className="opt11" onClick={() => performTask(3)}>
-                          <div className="opt14">Log Out</div>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="r13"></div>
-              {/* ----------------- bot chat--------------------- */}
-              {activeScreen === "history" && (
-                <div ref={myDivRef} className="r14">
-                  <div className="r25">
-                    {/* <div className="r21">
-                    <div className="r22">
-                      <img className="r22a" src={logomain2} alt="" />
-                    </div>
-                    <div className="r23">
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                    </div>
-                    <div className="r24">
-                      <BiMessageSquareEdit />
-                    </div>
-                  </div>
-                  <div className="r21answer">
-                    <div className="r22">
-                      <img className="r22a" src={logomain2} alt="" />
-                    </div>
-                    <div className="r23">
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                    </div>
-                    <div className="r24answer">
-                      <div className="r24">
-                        <AiOutlineLike />
-                      </div>{" "}
-                      <div className="r24">
-                        <AiOutlineDislike />
-                      </div>
-                    </div>
-                  </div> */}
-                    {/* ---------------  yash1   ---------------- */}
-                    {activeScreen === "history" && (
-                      <>
-                        {getRoomResponse?.chat_data?.map((val, index) => {
-                          // const response ={valquestion}
-                          const response = val?.answer;
-                          console.log("response123", response);
-                          const codeBlockRegex = /```([\s\S]+?)```/g;
-                          const renderMessage = (msg, index) => {
-                            const msgFORCopy = msg;
-                            if (index % 2 !== 0) {
-                              return (
+                                //  className="LeftPart"
+                              >
+                                {/* <Row> */}
+                                {/* <Col lg={2}> */}
+
+                                {/* </Col> */}
+
+                                {/* ----------------------------------------- */}
+                                {/* <Col lg={7}> */}
                                 <div
-                                  //  className="r30"
-                                  className={
-                                    isLightTheme ? "r30 light " : "r30 dark  "
-                                  }
-                                >
-                                  {" "}
-                                  <div
-                                    //  className="r31"
-                                    className={
-                                      isLightTheme ? "r31 light " : "r31 dark  "
-                                    }
-                                  >
-                                    <div className="r32">
-                                      {/* React Js */}
-                                      {/* {firstWords} */}
-                                      asd
-                                    </div>
-                                    {/* <div className="r33"> Copy</div> */}
+                                  // className="l5"
+                                  className={isLightTheme ? "l5 light" : "l5"}>
+                                  {/* ----------------------------- */}
+                                  {RoomsearchHistoryData?.data?.length > 0 ? (
+                                    RoomsearchHistoryData?.data?.map((val) => {
+                                      console.log(
+                                        "valueAASA12324",
+                                        RoomsearchHistoryData?.data?.length
+                                      );
 
-                                    <div
-                                      className="r33"
-                                      onClick={() => {
-                                        setCopyALlCOde(msg);
-                                        // setTextToCopy(finalCodeBlocks);
-                                        handleCopyClick(index, msg);
-                                      }}
-                                    >
-                                      {copied[index] ? "Copied" : "Copy"}
+                                      if (val?._id === 1) {
+                                        // Render data for _id 1
+                                        console.log("valueAASA", val);
+
+                                        return (
+                                          <>
+                                            <div className="day1">Today</div>
+                                            {val?.data?.length > 0 &&
+                                              val?.data?.map((valuea) => {
+                                                const isActive =
+                                                  valuea?._id === activeId;
+
+                                                console.log(
+                                                  "abhi",
+                                                  valuea?._id
+                                                );
+                                                console.log("abhi1", activeId);
+                                                console.log(
+                                                  "sdsfsdccbgfsras",
+                                                  isActive
+                                                );
+                                                const isActive1 =
+                                                  valuea?._id === activeId;
+                                                const titleSelect =
+                                                  valuea?.title;
+                                                return (
+                                                  <div
+                                                    key={valuea?._id}
+                                                    className={`${
+                                                      isLightTheme
+                                                        ? "L2 light"
+                                                        : "L2 dark"
+                                                    } ${
+                                                      isActive
+                                                        ? "activehistorydark"
+                                                        : ""
+                                                    } ${
+                                                      isActive1
+                                                        ? "activehistorylight"
+                                                        : ""
+                                                    }`}>
+                                                    <div
+                                                      onClick={() => {
+                                                        handleNavigation(
+                                                          "history"
+                                                        );
+                                                        handleL2Click(
+                                                          valuea?._id
+                                                        );
+
+                                                        setfget_historyRoom_by_id(
+                                                          valuea?._id
+                                                        );
+                                                        console.log(
+                                                          "abhi2",
+                                                          valuea?._id
+                                                        );
+                                                      }}
+                                                      className={
+                                                        isLightTheme
+                                                          ? "l3 light"
+                                                          : "l3 dark"
+                                                      }>
+                                                      <LuStars />
+                                                    </div>
+                                                    <div className="l4">
+                                                      {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                                      {/* {valuea?.title} */}
+                                                      {isTitleEditing &&
+                                                      StoreClickedIdOnly ===
+                                                        valuea?._id ? (
+                                                        <input
+                                                          className="r14ainput"
+                                                          type="text"
+                                                          placeholder={
+                                                            valuea?.title
+                                                          }
+                                                          value={Title}
+                                                          readOnly={
+                                                            !isTitleEditing
+                                                          }
+                                                          onChange={
+                                                            handleOnChange
+                                                          }
+                                                        />
+                                                      ) : (
+                                                        <div
+                                                          onClick={() => {
+                                                            setbuttonActive(
+                                                              false
+                                                            );
+
+                                                            handleNavigation(
+                                                              "history"
+                                                            );
+                                                            handleL2Click(
+                                                              valuea?._id
+                                                            );
+                                                            setfget_historyRoom_by_id(
+                                                              valuea?._id
+                                                            );
+                                                            console.log(
+                                                              "abhi3",
+                                                              valuea?._id
+                                                            );
+                                                            setIsTitleEditing(
+                                                              false
+                                                            );
+                                                          }}
+                                                          className="l4">
+                                                          {valuea?.title}
+                                                        </div>
+                                                      )}
+                                                    </div>
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <BiMessageSquareEdit
+                                                        className="logoclass"
+                                                        onClick={() => {
+                                                          setIsTitleEditing(
+                                                            !isTitleEditing
+                                                          );
+                                                          setStoreClickedIdOnly(
+                                                            valuea?._id
+                                                          ); // Set the ID of the item being edited
+                                                          setTitle(
+                                                            valuea?.title
+                                                          );
+                                                          setbuttonActive(true);
+                                                          // setActiveId("");
+                                                          // setIsActive(false);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <AiOutlineDelete
+                                                        onClick={() => {
+                                                          console.log(
+                                                            "jeetlodo"
+                                                          );
+                                                          HistoryDelete(
+                                                            valuea?._id
+                                                          );
+                                                        }}
+                                                        className="logoclass"
+                                                      />
+                                                    ) : null}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <BsCheckLg
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          HistoryUpdate(
+                                                            valuea?._id
+                                                          );
+                                                          // setActiveId(valuea?._id);
+                                                          // setbuttonActive(false);
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : // <img
+                                                    //   src={right}
+                                                    //   alt="asdas"
+                                                    //   className="logoclassWright"
+                                                    // />
+                                                    null}{" "}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <RxCross2
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          setActiveId(
+                                                            valuea?._id
+                                                          );
+                                                          setbuttonActive(
+                                                            false
+                                                          );
+                                                          setIsTitleEditing(
+                                                            false
+                                                          );
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                  </div>
+                                                );
+                                              })}
+                                          </>
+                                        );
+                                      } else if (val?._id === 2) {
+                                        // Render data for _id 1
+                                        console.log("valueAASA", val);
+
+                                        return (
+                                          <>
+                                            <div className="day1">Tommorow</div>
+
+                                            {val?.data?.length > 0 &&
+                                              val?.data?.map((valuea) => {
+                                                const isActive =
+                                                  valuea?._id === activeId;
+
+                                                console.log(
+                                                  "abhi",
+                                                  valuea?._id
+                                                );
+                                                console.log("abhi1", activeId);
+                                                console.log(
+                                                  "sdsfsdccbgfsras",
+                                                  isActive
+                                                );
+                                                const isActive1 =
+                                                  valuea?._id === activeId;
+                                                const titleSelect =
+                                                  valuea?.title;
+                                                return (
+                                                  <div
+                                                    key={valuea?._id}
+                                                    className={`${
+                                                      isLightTheme
+                                                        ? "L2 light"
+                                                        : "L2 dark"
+                                                    } ${
+                                                      isActive
+                                                        ? "activehistorydark"
+                                                        : ""
+                                                    } ${
+                                                      isActive1
+                                                        ? "activehistorylight"
+                                                        : ""
+                                                    }`}>
+                                                    <div
+                                                      onClick={() => {
+                                                        handleNavigation(
+                                                          "history"
+                                                        );
+                                                        handleL2Click(
+                                                          valuea?._id
+                                                        );
+
+                                                        setfget_historyRoom_by_id(
+                                                          valuea?._id
+                                                        );
+                                                        console.log(
+                                                          "abhi2",
+                                                          valuea?._id
+                                                        );
+                                                      }}
+                                                      className={
+                                                        isLightTheme
+                                                          ? "l3 light"
+                                                          : "l3 dark"
+                                                      }>
+                                                      <LuStars />
+                                                    </div>
+                                                    <div className="l4">
+                                                      {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                                      {/* {valuea?.title} */}
+                                                      {isTitleEditing &&
+                                                      StoreClickedIdOnly ===
+                                                        valuea?._id ? (
+                                                        <input
+                                                          className="r14ainput"
+                                                          type="text"
+                                                          placeholder={
+                                                            valuea?.title
+                                                          }
+                                                          value={Title}
+                                                          readOnly={
+                                                            !isTitleEditing
+                                                          }
+                                                          onChange={
+                                                            handleOnChange
+                                                          }
+                                                        />
+                                                      ) : (
+                                                        <div
+                                                          onClick={() => {
+                                                            setbuttonActive(
+                                                              false
+                                                            );
+
+                                                            handleNavigation(
+                                                              "history"
+                                                            );
+                                                            handleL2Click(
+                                                              valuea?._id
+                                                            );
+                                                            setfget_historyRoom_by_id(
+                                                              valuea?._id
+                                                            );
+                                                            console.log(
+                                                              "abhi3",
+                                                              valuea?._id
+                                                            );
+                                                            setIsTitleEditing(
+                                                              false
+                                                            );
+                                                          }}
+                                                          className="l4">
+                                                          {valuea?.title}
+                                                        </div>
+                                                      )}
+                                                    </div>
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <BiMessageSquareEdit
+                                                        className="logoclass"
+                                                        onClick={() => {
+                                                          setIsTitleEditing(
+                                                            !isTitleEditing
+                                                          );
+                                                          setStoreClickedIdOnly(
+                                                            valuea?._id
+                                                          ); // Set the ID of the item being edited
+                                                          setTitle(
+                                                            valuea?.title
+                                                          );
+                                                          setbuttonActive(true);
+                                                          // setActiveId("");
+                                                          // setIsActive(false);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <AiOutlineDelete
+                                                        onClick={() => {
+                                                          HistoryDelete(
+                                                            valuea?._id
+                                                          );
+                                                        }}
+                                                        className="logoclass"
+                                                      />
+                                                    ) : null}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <BsCheckLg
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          HistoryUpdate(
+                                                            valuea?._id
+                                                          );
+                                                          // setActiveId(valuea?._id);
+                                                          // setbuttonActive(false);
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : // <img
+                                                    //   src={right}
+                                                    //   alt="asdas"
+                                                    //   className="logoclassWright"
+                                                    // />
+                                                    null}{" "}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <RxCross2
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          setActiveId(
+                                                            valuea?._id
+                                                          );
+                                                          setbuttonActive(
+                                                            false
+                                                          );
+                                                          setIsTitleEditing(
+                                                            false
+                                                          );
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                  </div>
+                                                );
+                                              })}
+                                          </>
+                                        );
+                                      } else if (val?._id === 7) {
+                                        // Render data for _id 1
+                                        console.log("valueAASA", val);
+
+                                        return (
+                                          <>
+                                            <div className="day1">
+                                              a week ago
+                                            </div>
+
+                                            {val?.data?.length > 0 &&
+                                              val?.data?.map((valuea) => {
+                                                const isActive =
+                                                  valuea?._id === activeId;
+
+                                                console.log(
+                                                  "abhi",
+                                                  valuea?._id
+                                                );
+                                                console.log("abhi1", activeId);
+                                                console.log(
+                                                  "sdsfsdccbgfsras",
+                                                  isActive
+                                                );
+                                                const isActive1 =
+                                                  valuea?._id === activeId;
+                                                const titleSelect =
+                                                  valuea?.title;
+                                                return (
+                                                  <div
+                                                    key={valuea?._id}
+                                                    className={`${
+                                                      isLightTheme
+                                                        ? "L2 light"
+                                                        : "L2 dark"
+                                                    } ${
+                                                      isActive
+                                                        ? "activehistorydark"
+                                                        : ""
+                                                    } ${
+                                                      isActive1
+                                                        ? "activehistorylight"
+                                                        : ""
+                                                    }`}>
+                                                    <div
+                                                      onClick={() => {
+                                                        handleNavigation(
+                                                          "history"
+                                                        );
+                                                        handleL2Click(
+                                                          valuea?._id
+                                                        );
+
+                                                        setfget_historyRoom_by_id(
+                                                          valuea?._id
+                                                        );
+                                                        console.log(
+                                                          "abhi2",
+                                                          valuea?._id
+                                                        );
+                                                        setIsNewChatClicked(
+                                                          false
+                                                        );
+                                                      }}
+                                                      className={
+                                                        isLightTheme
+                                                          ? "l3 light"
+                                                          : "l3 dark"
+                                                      }>
+                                                      <LuStars />
+                                                    </div>
+                                                    <div className="l4">
+                                                      {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                                      {/* {valuea?.title} */}
+                                                      {isTitleEditing &&
+                                                      StoreClickedIdOnly ===
+                                                        valuea?._id ? (
+                                                        <input
+                                                          className="r14ainput"
+                                                          type="text"
+                                                          placeholder={
+                                                            valuea?.title
+                                                          }
+                                                          value={Title}
+                                                          readOnly={
+                                                            !isTitleEditing
+                                                          }
+                                                          onChange={
+                                                            handleOnChange
+                                                          }
+                                                        />
+                                                      ) : (
+                                                        <div
+                                                          onClick={() => {
+                                                            // setbuttonActive(false);
+
+                                                            handleNavigation(
+                                                              "history"
+                                                            );
+                                                            handleL2Click(
+                                                              valuea?._id
+                                                            );
+                                                            setfget_historyRoom_by_id(
+                                                              valuea?._id
+                                                            );
+                                                            console.log(
+                                                              "abhi3",
+                                                              valuea?._id
+                                                            );
+                                                            setIsTitleEditing(
+                                                              false
+                                                            );
+                                                          }}
+                                                          className="l4">
+                                                          {valuea?.title}
+                                                        </div>
+                                                      )}
+                                                    </div>
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <BiMessageSquareEdit
+                                                        className="logoclass"
+                                                        onClick={() => {
+                                                          setIsTitleEditing(
+                                                            !isTitleEditing
+                                                          );
+                                                          setStoreClickedIdOnly(
+                                                            valuea?._id
+                                                          ); // Set the ID of the item being edited
+                                                          setTitle(
+                                                            valuea?.title
+                                                          );
+                                                          setbuttonActive(true);
+                                                          // setActiveId("");
+                                                          // setIsActive(false);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <AiOutlineDelete
+                                                        onClick={() => {
+                                                          HistoryDelete(
+                                                            valuea?._id
+                                                          );
+                                                        }}
+                                                        className="logoclass"
+                                                      />
+                                                    ) : null}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <BsCheckLg
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          HistoryUpdate(
+                                                            valuea?._id
+                                                          );
+                                                          // setActiveId(valuea?._id);
+                                                          // setbuttonActive(false);
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : // <img
+                                                    //   src={right}
+                                                    //   alt="asdas"
+                                                    //   className="logoclassWright"
+                                                    // />
+                                                    null}{" "}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <RxCross2
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          setActiveId(
+                                                            valuea?._id
+                                                          );
+                                                          setbuttonActive(
+                                                            false
+                                                          );
+                                                          setIsTitleEditing(
+                                                            false
+                                                          );
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                  </div>
+                                                );
+                                              })}
+                                          </>
+                                        );
+                                      } else if (val?._id === 14) {
+                                        // Render data for _id 1
+                                        console.log("valueAASA", val);
+
+                                        return (
+                                          <>
+                                            <div className="day1">
+                                              15 days ago
+                                            </div>
+                                            {val?.data?.length > 0 &&
+                                              val?.data?.map((valuea) => {
+                                                const isActive =
+                                                  valuea?._id === activeId;
+
+                                                console.log(
+                                                  "abhi",
+                                                  valuea?._id
+                                                );
+                                                console.log("abhi1", activeId);
+                                                console.log(
+                                                  "sdsfsdccbgfsras",
+                                                  isActive
+                                                );
+                                                const isActive1 =
+                                                  valuea?._id === activeId;
+                                                const titleSelect =
+                                                  valuea?.title;
+                                                return (
+                                                  <div
+                                                    key={valuea?._id}
+                                                    className={`${
+                                                      isLightTheme
+                                                        ? "L2 light"
+                                                        : "L2 dark"
+                                                    } ${
+                                                      isActive
+                                                        ? "activehistorydark"
+                                                        : ""
+                                                    } ${
+                                                      isActive1
+                                                        ? "activehistorylight"
+                                                        : ""
+                                                    }`}>
+                                                    <div
+                                                      onClick={() => {
+                                                        setIsNewChatClicked(
+                                                          false
+                                                        );
+
+                                                        handleNavigation(
+                                                          "history"
+                                                        );
+                                                        handleL2Click(
+                                                          valuea?._id
+                                                        );
+
+                                                        setfget_historyRoom_by_id(
+                                                          valuea?._id
+                                                        );
+                                                        console.log(
+                                                          "abhi2",
+                                                          valuea?._id
+                                                        );
+                                                      }}
+                                                      className={
+                                                        isLightTheme
+                                                          ? "l3 light"
+                                                          : "l3 dark"
+                                                      }>
+                                                      <LuStars />
+                                                    </div>
+                                                    <div className="l4">
+                                                      {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                                      {/* {valuea?.title} */}
+                                                      {isTitleEditing &&
+                                                      StoreClickedIdOnly ===
+                                                        valuea?._id ? (
+                                                        <input
+                                                          className="r14ainput"
+                                                          type="text"
+                                                          placeholder={
+                                                            valuea?.title
+                                                          }
+                                                          value={Title}
+                                                          readOnly={
+                                                            !isTitleEditing
+                                                          }
+                                                          onChange={
+                                                            handleOnChange
+                                                          }
+                                                        />
+                                                      ) : (
+                                                        <div
+                                                          onClick={() => {
+                                                            setbuttonActive(
+                                                              false
+                                                            );
+
+                                                            handleNavigation(
+                                                              "history"
+                                                            );
+                                                            handleL2Click(
+                                                              valuea?._id
+                                                            );
+                                                            setfget_historyRoom_by_id(
+                                                              valuea?._id
+                                                            );
+                                                            console.log(
+                                                              "abhi3",
+                                                              valuea?._id
+                                                            );
+                                                            setIsTitleEditing(
+                                                              false
+                                                            );
+                                                          }}
+                                                          className="l4">
+                                                          {valuea?.title}
+                                                        </div>
+                                                      )}
+                                                    </div>
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <BiMessageSquareEdit
+                                                        className="logoclass"
+                                                        onClick={() => {
+                                                          setIsTitleEditing(
+                                                            !isTitleEditing
+                                                          );
+                                                          setStoreClickedIdOnly(
+                                                            valuea?._id
+                                                          ); // Set the ID of the item being edited
+                                                          setTitle(
+                                                            valuea?.title
+                                                          );
+                                                          setbuttonActive(true);
+                                                          // setActiveId("");
+                                                          // setIsActive(false);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <AiOutlineDelete
+                                                        onClick={() => {
+                                                          HistoryDelete(
+                                                            valuea?._id
+                                                          );
+                                                        }}
+                                                        className="logoclass"
+                                                      />
+                                                    ) : null}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <BsCheckLg
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          HistoryUpdate(
+                                                            valuea?._id
+                                                          );
+                                                          // setActiveId(valuea?._id);
+                                                          // setbuttonActive(false);
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : // <img
+                                                    //   src={right}
+                                                    //   alt="asdas"
+                                                    //   className="logoclassWright"
+                                                    // />
+                                                    null}{" "}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <RxCross2
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          setActiveId(
+                                                            valuea?._id
+                                                          );
+                                                          setbuttonActive(
+                                                            false
+                                                          );
+                                                          setIsTitleEditing(
+                                                            false
+                                                          );
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                  </div>
+                                                );
+                                              })}
+                                          </>
+                                        );
+                                      } else if (val?._id === 30) {
+                                        // Render data for _id 1
+                                        console.log("valueAASA", val);
+
+                                        return (
+                                          <>
+                                            <div className="day1">
+                                              a Month ago
+                                            </div>
+
+                                            {val?.data?.length > 0 &&
+                                              val?.data?.map((valuea) => {
+                                                const isActive =
+                                                  valuea?._id === activeId;
+
+                                                console.log(
+                                                  "abhi",
+                                                  valuea?._id
+                                                );
+                                                console.log("abhi1", activeId);
+                                                console.log(
+                                                  "sdsfsdccbgfsras",
+                                                  isActive
+                                                );
+                                                const isActive1 =
+                                                  valuea?._id === activeId;
+                                                const titleSelect =
+                                                  valuea?.title;
+                                                return (
+                                                  <div
+                                                    key={valuea?._id}
+                                                    className={`${
+                                                      isLightTheme
+                                                        ? "L2 light"
+                                                        : "L2 dark"
+                                                    } ${
+                                                      isActive
+                                                        ? "activehistorydark"
+                                                        : ""
+                                                    } ${
+                                                      isActive1
+                                                        ? "activehistorylight"
+                                                        : ""
+                                                    }`}>
+                                                    <div
+                                                      onClick={() => {
+                                                        handleNavigation(
+                                                          "history"
+                                                        );
+                                                        handleL2Click(
+                                                          valuea?._id
+                                                        );
+
+                                                        setfget_historyRoom_by_id(
+                                                          valuea?._id
+                                                        );
+                                                        console.log(
+                                                          "abhi2",
+                                                          valuea?._id
+                                                        );
+                                                      }}
+                                                      className={
+                                                        isLightTheme
+                                                          ? "l3 light"
+                                                          : "l3 dark"
+                                                      }>
+                                                      <LuStars />
+                                                    </div>
+                                                    <div className="l4">
+                                                      {/* <input
+                                    className="r14ainput"
+                                    type="text"
+                                    placeholder={valuea?.title}
+                                  /> */}
+                                                      {/* {valuea?.title} */}
+                                                      {isTitleEditing &&
+                                                      StoreClickedIdOnly ===
+                                                        valuea?._id ? (
+                                                        <input
+                                                          className="r14ainput"
+                                                          type="text"
+                                                          placeholder={
+                                                            valuea?.title
+                                                          }
+                                                          value={Title}
+                                                          readOnly={
+                                                            !isTitleEditing
+                                                          }
+                                                          onChange={
+                                                            handleOnChange
+                                                          }
+                                                        />
+                                                      ) : (
+                                                        <div
+                                                          onClick={() => {
+                                                            setbuttonActive(
+                                                              false
+                                                            );
+
+                                                            handleNavigation(
+                                                              "history"
+                                                            );
+                                                            handleL2Click(
+                                                              valuea?._id
+                                                            );
+                                                            setfget_historyRoom_by_id(
+                                                              valuea?._id
+                                                            );
+                                                            console.log(
+                                                              "abhi3",
+                                                              valuea?._id
+                                                            );
+                                                            setIsTitleEditing(
+                                                              false
+                                                            );
+                                                          }}
+                                                          className="l4">
+                                                          {valuea?.title}
+                                                        </div>
+                                                      )}
+                                                    </div>
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <BiMessageSquareEdit
+                                                        className="logoclass"
+                                                        onClick={() => {
+                                                          setIsTitleEditing(
+                                                            !isTitleEditing
+                                                          );
+                                                          setStoreClickedIdOnly(
+                                                            valuea?._id
+                                                          ); // Set the ID of the item being edited
+                                                          setTitle(
+                                                            valuea?.title
+                                                          );
+                                                          setbuttonActive(true);
+                                                          // setActiveId("");
+                                                          // setIsActive(false);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                    {isActive &&
+                                                    !buttonActive ? (
+                                                      <AiOutlineDelete
+                                                        onClick={() => {
+                                                          HistoryDelete(
+                                                            valuea?._id
+                                                          );
+                                                        }}
+                                                        className="logoclass"
+                                                      />
+                                                    ) : null}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <BsCheckLg
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          HistoryUpdate(
+                                                            valuea?._id
+                                                          );
+                                                          // setActiveId(valuea?._id);
+                                                          // setbuttonActive(false);
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : // <img
+                                                    //   src={right}
+                                                    //   alt="asdas"
+                                                    //   className="logoclassWright"
+                                                    // />
+                                                    null}{" "}
+                                                    {buttonActive &&
+                                                    isActive ? (
+                                                      <RxCross2
+                                                        className="logoclassWright"
+                                                        onClick={() => {
+                                                          setActiveId(
+                                                            valuea?._id
+                                                          );
+                                                          setbuttonActive(
+                                                            false
+                                                          );
+                                                          setIsTitleEditing(
+                                                            false
+                                                          );
+                                                          // setIsTitleEditing(!isTitleEditing);
+                                                          // setStoreClickedIdOnly(valuea?._id); // Set the ID of the item being edited
+                                                          // setTitle(valuea?.title);
+                                                        }}
+                                                      />
+                                                    ) : null}
+                                                  </div>
+                                                );
+                                              })}
+                                          </>
+                                        );
+                                      }
+                                    })
+                                  ) : (
+                                    <div className="a1">
+                                      <center>
+                                        <div className="a2">
+                                          <div className="a3">
+                                            <h1>
+                                              <ImFilesEmpty />
+                                            </h1>
+                                          </div>
+                                          <div className="a4">
+                                            No History Available .
+                                          </div>
+                                          <div className="a4">
+                                            Please Create a new Room .
+                                          </div>
+                                        </div>
+                                      </center>
                                     </div>
-                                  </div>{" "}
-                                  <div className="r34">
+                                  )}
+
+                                  {/* ----------------------------- */}
+                                </div>
+                                {/* </Col> */}
+                                {/* ----------------------------------------- */}
+                                {/* <Col lg={3}> */}
+
+                                <div
+                                  //  className="l6"
+                                  className={
+                                    isLightTheme ? "l6 light" : "l6 dark"
+                                  }>
+                                  <div
+                                    //  className="l17"
+                                    className={
+                                      isLightTheme ? "l17 light" : "l17 dark"
+                                    }>
                                     <div
-                                      className="r34a"
-                                      // dangerouslySetInnerHTML={{
-                                      // __html: finalCodeBlocks,
-                                      // }}
-                                    >
-                                      <SyntaxHighlighter
-                                        // language={
-                                        //   firstWords && firstWords[index]
-                                        // }
-                                        // language={React}
-                                        // language="react"
-                                        style={vs2015}
-                                        //   language={firstWords[index]}
-                                        // style={vs}
-                                      >
-                                        {/* <code> */}
-                                        {/* {split?.[1]} */}
-                                        {msg}
-                                        {/* </code> */}
-                                      </SyntaxHighlighter>
-                                      {/* <code>{finalCodeBlocks}</code> */}
+                                      //  className="l12"
+                                      className={
+                                        isLightTheme ? "l12 light" : "l12 dark"
+                                      }>
+                                      Credits
+                                    </div>
+                                    {/* <div
+                  //  className="l13"
+                  className={isLightTheme ? "l13 light" : "l13"}>
+                  <div
+                    //  className="l14"
+                    className={isLightTheme ? "l14 light" : "l14"}></div>
+                </div> */}
+                                    <ProgressBar
+                                      className="prg1"
+                                      now={progressPercentage}
+                                    />
+                                    <div
+                                      // className="l15"
+                                      className={
+                                        isLightTheme ? "l15 light" : "l15 dark"
+                                      }>
+                                      {weeklyGraph?.data?.total_count}/
+                                      {maxCount} credits used
+                                    </div>
+                                    <div className="l16">
+                                      <BarChart
+                                        width={260}
+                                        height={185}
+                                        data={data}>
+                                        <XAxis
+                                          dataKey="name"
+                                          stroke="#8884d8"
+                                        />
+                                        <Tooltip contentStyle={tooltipStyles} />
+                                        <Bar
+                                          dataKey="uv"
+                                          fill="#0062ff"
+                                          barSize={15}
+                                          radius={[10, 10, 0, 0]}
+                                        />
+                                      </BarChart>
                                     </div>
                                   </div>
+                                  {/* 
+            <div className="l7">
+              <div className="l8">
+                {" "}
+                <div className="l9"></div>
+                <div className="l10">Abhi Baldha</div>
+                <div className="l11"></div>
+                <div className="l11"></div>
+              </div>
+            </div> */}
                                 </div>
-                              );
-                            } else {
-                              return (
-                                // <p key={index} className="code-block">
-                                <div key={index} className="r34a1">
-                                  <code
-                                    //  className="cod1"
-                                    className={
-                                      isLightTheme ? "cod1  " : "cod1 dark "
-                                    }
-                                  >
-                                    {/* {split?.[0]} */}
-                                    {msg.replace(/```/g, "")}
-                                  </code>
-                                </div>
-                                // </p>
-                              );
-                            }
-                          };
-                          const messageBlocks = response.split(codeBlockRegex);
-                          // -----------------------
-
-                          const handleCopyClick = (index, msg) => {
-                            // Create a temporary textarea element to copy the text
-                            const tempTextarea = document.createElement(
-                              "textarea"
-                            );
-                            tempTextarea.value = msg;
-
-                            document.body.appendChild(tempTextarea);
-
-                            // Select the text inside the textarea and copy it
-                            tempTextarea.select();
-                            document.execCommand("copy");
-
-                            // Remove the temporary textarea element
-                            document.body.removeChild(tempTextarea);
-
-                            // Set the copied status for the clicked element's index to true
-                            setCopied((prevStatus) => ({
-                              ...prevStatus,
-                              [index]: true,
-                            }));
-
-                            // Reset the copied status to false after 4 seconds
-                            setTimeout(() => {
-                              setCopied((prevStatus) => ({
-                                ...prevStatus,
-                                [index]: false,
-                              }));
-                            }, 4000);
-                          };
-                          // -----------------------
-                          return (
-                            <>
-                              <div
-                                // className="r21"
-                                className={
-                                  isLightTheme ? "r21 light " : "r21 dark  "
-                                }
-                              >
-                                <div
-                                  //  className="r22"
-                                  className={
-                                    isLightTheme ? "r22 light " : "r22 dark  "
-                                  }
-                                >
-                                  {getRoomResponse?.user_data?.map((abc) => {
-                                    return (
-                                      <>
-                                        <img
-                                          className="r22ab"
-                                          src={abc?.profileImage}
-                                          alt=""
-                                        />
-                                      </>
-                                    );
-                                  })}
-                                </div>
-                                {/* <div
-                                className={isLightTheme ? "r23 light " : "r23"}>
-                                {val?.question}
-                              </div> */}
-                                {EditActive ? (
-                                  <>
-                                    {" "}
-                                    <div
-                                      className={
-                                        isLightTheme ? "r23 light " : "r23"
-                                      }
-                                    >
-                                      {val?.question}
-                                      {/* <code> */}
-                                      {/* <input
-                                      placeholder={val?.question}
-                                      type="text"
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      className="inputUpdate1"
-                                    /> */}
-                                      {/* <textarea
-                                      // rows={6}
-                                      placeholder={val?.question}
-                                      type="text"
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      className="inputUpdate1"></textarea> */}
-                                      {/* <textarea
-                                      ref={textareaRef}
-                                      placeholder={val?.question}
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      onInput={(event) =>
-                                        adjustHeight(event.target)
-                                      }
-                                      // className={`custom-input ${
-                                      //   containerActive ? "active" : ""
-                                      // }`}
-                                      className={
-                                        isLightTheme
-                                          ? `custom-inputa1 ${
-                                              containerActive ? "active" : ""
-                                            }`
-                                          : `custom-input ${
-                                              containerActive ? "active" : ""
-                                            }`
-                                      }
-                                    /> */}
-                                      {/* </code> */}
-                                    </div>
-                                    <div
-                                      onClick={() => {
-                                        setEditActive(true);
-                                        // setQTitle(val?.question);
-                                        setValue(val?.question);
-                                        setUpdateApiId(val?._id);
-                                        setisUpdateClicked(true);
-                                        handleL2ClickText(val?._id);
-                                      }}
-                                      className={
-                                        isLightTheme ? "r24 light " : "r24"
-                                      }
-                                    >
-                                      <BiMessageSquareEdit />
-                                    </div>
-                                  </>
-                                ) : (
-                                  <>
-                                    {" "}
-                                    <div
-                                      className={
-                                        isLightTheme ? "r23 light " : "r23"
-                                      }
-                                    >
-                                      {val?.question}
-                                    </div>
-                                    <div
-                                      onClick={() => {
-                                        setEditActive(true);
-                                        setValue(val?.question);
-                                        setUpdateApiId(val?._id);
-                                        setisUpdateClicked(true);
-                                        handleL2ClickText();
-                                      }}
-                                      className={
-                                        isLightTheme ? "r24 light " : "r24"
-                                      }
-                                    >
-                                      <BiMessageSquareEdit />
-                                    </div>
-                                  </>
-                                )}
-                              </div>{" "}
-                              {/* ------------------------------- */}
-                              <div className="abhiFOR1">
-                                <div
-                                  // className="r22"
-                                  className={
-                                    isLightTheme ? "r22 light " : "r22 dark  "
-                                  }
-                                >
-                                  <img
-                                    className="r22a"
-                                    src={logomain2}
-                                    alt=""
-                                  />
-                                </div>
-                                <div>
-                                  {messageBlocks.map((msg, index) =>
-                                    renderMessage(msg, index)
-                                  )}
-                                </div>
+                                {/* </Col> */}
+                                {/* </Row> */}
                               </div>
-                            </>
-                          );
-                        })}
-                      </>
-                    )}{" "}
-                    {/* ------------- yash2 ------------------ */}{" "}
-                    {/* here active that came  */}
-                    {activeScreen === "new" && (
-                      <>
-                        {getRoomResponse?.chat_data?.length > 0 ? (
-                          getRoomResponse?.chat_data?.map((val, index) => {
+                            </Offcanvas.Body>
+                          </Offcanvas>
+                          <div className="d-flex r2a1a">
+                            <div
+                              // className="r3"
+                              className={isLightTheme ? "r3 light" : "r3 dark"}
+                              onClick={() => {
+                                newQuery();
+                                setfget_historyRoom_by_id("");
+                                setActiveId("");
+                              }}>
+                              <div
+                                //  className="r3a"
+                                className={isLightTheme ? "r3a light" : "r3a "}>
+                                <IoAddCircleOutline />
+                              </div>
+                              <div
+                                //  className="r3b"
+                                className={
+                                  isLightTheme
+                                    ? "r3b d-sm-block d-none light"
+                                    : "r3b d-sm-block d-none  "
+                                }>
+                                New Chat
+                              </div>
+                            </div>
+                            <div
+                              //  className="r5"
+                              className={
+                                isLightTheme
+                                  ? "r5 d-md-block  d-none light"
+                                  : "r5 d-md-block  d-none dark"
+                              }>
+                              <IoMdLock />
+                            </div>{" "}
+                            <div
+                              //  className="r5"
+                              className={
+                                isLightTheme
+                                  ? "r5 d-md-block  d-none light"
+                                  : "r5 d-md-block  d-none dark"
+                              }>
+                              <AiOutlineInfoCircle />
+                            </div>{" "}
+                            <div
+                              // className="r5"
+                              className={isLightTheme ? "r5 light" : "r5 dark"}
+                              onClick={toggleTheme}>
+                              {isLightTheme ? <BiMoon /> : <BiSolidSun />}
+                            </div>
+                            <div
+                              // onClick={toogleSignUppage}
+                              className={isLightTheme ? "r6 light" : "r6 dark"}
+                              onMouseEnter={toggleDropdown}
+                              onMouseLeave={toggleDropdown}
+                              //  className="r6"
+                            >
+                              <img
+                                className={
+                                  isLightTheme ? "r6 light" : "r6 dark"
+                                }
+                                src={UserProfile?.data?.profileImage}
+                                alt=""
+                              />
+                              {showDropdown && (
+                                <div className="dropdown opt">
+                                  <ul className="opt13">
+                                    <li className="opt15">
+                                      <div className="opt16">
+                                        <span className="opt18">
+                                          <FaHandsClapping />
+                                        </span>
+                                        <span className="opt17"></span>
+                                        Hi
+                                        <span className="opt19">
+                                          {" "}
+                                          {UserProfile?.data?.userName}
+                                        </span>
+                                      </div>{" "}
+                                    </li>
+
+                                    <li
+                                      className="opt11"
+                                      onClick={() => performTask(1)}>
+                                      <div className="opt14">Profile</div>
+                                    </li>
+                                    <li
+                                      className="opt11"
+                                      onClick={() => performTask(2)}>
+                                      <div className="opt14">Task 2</div>
+                                    </li>
+                                    <li
+                                      className="opt11"
+                                      onClick={() => performTask(3)}>
+                                      <div className="opt14">Log Out</div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* ==== pikino========================= */}
+                    {/* <div className="r13"></div> */}
+                    {/* ============================= */}
+                    {/* ----------------- bot chat--------------------- */}
+                    {/* <Chat /> */}
+                    {activeScreen === "history" && (
+                      <div ref={myDivRef} className="r14 px-5 w-100  d-flex  ">
+                        <div className="r25 w-100">
+                          {/* ---------------  yash1   ---------------- */}
+                          {/* {activeScreen === "history" && (
+                            <> */}
+                          {getRoomResponse?.chat_data?.map((val, index) => {
                             // const response ={valquestion}
                             const response = val?.answer;
                             console.log("response123", response);
                             const codeBlockRegex = /```([\s\S]+?)```/g;
                             const renderMessage = (msg, index) => {
                               const msgFORCopy = msg;
+
                               if (index % 2 !== 0) {
+                                const firstWordJAva = "";
+                                // const words = msg.trim().split(" ");
+                                // const firstWordJAva =
+                                //   words.length > 0 ? words[0] : "";
+                                const lines = msg.split("\n");
+                                const chunks = [];
+
+                                for (const line of lines) {
+                                  const words = line.split(" ");
+                                  let currentChunk = words[0];
+
+                                  for (let i = 1; i < words.length; i++) {
+                                    if (
+                                      (currentChunk + " " + words[i]).length <=
+                                      15
+                                    ) {
+                                      currentChunk += " " + words[i];
+                                    } else {
+                                      chunks.push(currentChunk);
+                                      currentChunk = words[i];
+                                    }
+                                  }
+
+                                  chunks.push(currentChunk);
+                                }
+
+                                console.log(chunks, "aaaaasss");
+                                console.log("msg123123", firstWordJAva);
+                                const firstSpaceIndex = msg.indexOf("\n");
+
+                                // Extract the content after the first space
+                                const newText =
+                                  firstSpaceIndex !== -1
+                                    ? msg.substring(firstSpaceIndex + 1)
+                                    : msg;
+                                console.log("newText", newText);
                                 return (
                                   <div
                                     //  className="r30"
                                     className={
                                       isLightTheme ? "r30 light " : "r30 dark  "
-                                    }
-                                  >
+                                    }>
                                     {" "}
                                     <div
                                       //  className="r31"
@@ -2010,14 +2935,12 @@ function Main() {
                                         isLightTheme
                                           ? "r31 light "
                                           : "r31 dark  "
-                                      }
-                                    >
+                                      }>
                                       <div className="r32">
-                                        {/* React Js */}
-                                        {/* {firstWords} */}
-                                        asd
+                                        {/* {firstWordJAva} */}
+
+                                        {chunks[0]}
                                       </div>
-                                      {/* <div className="r33"> Copy</div> */}
 
                                       <div
                                         className="r33"
@@ -2025,8 +2948,7 @@ function Main() {
                                           setCopyALlCOde(msg);
                                           // setTextToCopy(finalCodeBlocks);
                                           handleCopyClick(index, msg);
-                                        }}
-                                      >
+                                        }}>
                                         {copied[index] ? "Copied" : "Copy"}
                                       </div>
                                     </div>{" "}
@@ -2049,7 +2971,7 @@ function Main() {
                                         >
                                           {/* <code> */}
                                           {/* {split?.[1]} */}
-                                          {msg}
+                                          {newText}
                                           {/* </code> */}
                                         </SyntaxHighlighter>
                                         {/* <code>{finalCodeBlocks}</code> */}
@@ -2065,8 +2987,7 @@ function Main() {
                                       //  className="cod1"
                                       className={
                                         isLightTheme ? "cod1  " : "cod1 dark "
-                                      }
-                                    >
+                                      }>
                                       {/* {split?.[0]} */}
                                       {msg.replace(/```/g, "")}
                                     </code>
@@ -2075,16 +2996,14 @@ function Main() {
                                 );
                               }
                             };
-                            const messageBlocks = response.split(
-                              codeBlockRegex
-                            );
+                            const messageBlocks =
+                              response.split(codeBlockRegex);
                             // -----------------------
 
                             const handleCopyClick = (index, msg) => {
                               // Create a temporary textarea element to copy the text
-                              const tempTextarea = document.createElement(
-                                "textarea"
-                              );
+                              const tempTextarea =
+                                document.createElement("textarea");
                               tempTextarea.value = msg;
 
                               document.body.appendChild(tempTextarea);
@@ -2113,132 +3032,108 @@ function Main() {
                             // -----------------------
                             return (
                               <>
-                                <div
-                                  // className="r21"
-                                  className={
-                                    isLightTheme ? "r21 light " : "r21 dark  "
-                                  }
-                                >
-                                  <div
-                                    //  className="r22"
-                                    className={
-                                      isLightTheme ? "r22 light " : "r22 dark  "
-                                    }
-                                  >
-                                    {getRoomResponse?.user_data?.map((abc) => {
-                                      return (
-                                        <>
-                                          <img
-                                            className="r22ab"
-                                            src={abc?.profileImage}
-                                            alt=""
-                                          />
-                                        </>
-                                      );
-                                    })}
-                                  </div>
-                                  {/* <div
-                                className={isLightTheme ? "r23 light " : "r23"}>
-                                {val?.question}
-                              </div> */}
-                                  {EditActive ? (
-                                    <>
-                                      {" "}
-                                      <div
-                                        className={
-                                          isLightTheme ? "r23 light " : "r23"
-                                        }
-                                      >
-                                        {val?.question}
-                                        {/* <code> */}
-                                        {/* <input
-                                      placeholder={val?.question}
-                                      type="text"
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      className="inputUpdate1"
-                                    /> */}
-                                        {/* <textarea
-                                      // rows={6}
-                                      placeholder={val?.question}
-                                      type="text"
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      className="inputUpdate1"></textarea> */}
-                                        {/* <textarea
-                                      ref={textareaRef}
-                                      placeholder={val?.question}
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      onInput={(event) =>
-                                        adjustHeight(event.target)
-                                      }
-                                      // className={`custom-input ${
-                                      //   containerActive ? "active" : ""
-                                      // }`}
-                                      className={
-                                        isLightTheme
-                                          ? `custom-inputa1 ${
-                                              containerActive ? "active" : ""
-                                            }`
-                                          : `custom-input ${
-                                              containerActive ? "active" : ""
-                                            }`
-                                      }
-                                    /> */}
-                                        {/* </code> */}
-                                      </div>
-                                      <div
-                                        onClick={() => {
-                                          setEditActive(true);
-                                          // setQTitle(val?.question);
-                                          setValue(val?.question);
-                                          setUpdateApiId(val?._id);
-                                          setisUpdateClicked(true);
-                                          handleL2ClickText(val?._id);
-                                        }}
-                                        className={
-                                          isLightTheme ? "r24 light " : "r24"
-                                        }
-                                      >
-                                        <BiMessageSquareEdit />
-                                      </div>
-                                    </>
-                                  ) : (
-                                    <>
-                                      {" "}
-                                      <div
-                                        className={
-                                          isLightTheme ? "r23 light " : "r23"
-                                        }
-                                      >
-                                        {val?.question}
-                                      </div>
-                                      <div
-                                        onClick={() => {
-                                          setEditActive(true);
-                                          setValue(val?.question);
-                                          setUpdateApiId(val?._id);
-                                          setisUpdateClicked(true);
-                                          handleL2ClickText();
-                                        }}
-                                        className={
-                                          isLightTheme ? "r24 light " : "r24"
-                                        }
-                                      >
-                                        <BiMessageSquareEdit />
-                                      </div>
-                                    </>
-                                  )}
-                                </div>{" "}
                                 {/* ------------------------------- */}
-                                <div className="abhiFOR1">
+                                <Container fluid className="">
+                                  <div>
+                                    <div className="p-0 pt-4">
+                                      <div className="chat1 p-3 d-flex  ">
+                                        <Row className="m-0 p-0 w-100 align-items-start">
+                                          <Col
+                                            sm={1}
+                                            lg={1}
+                                            xl={1}
+                                            md={1}
+                                            className="p-0 col-1 sm-1">
+                                            <div className="chat2 ">
+                                              {getRoomResponse?.user_data?.map(
+                                                (abc) => {
+                                                  return (
+                                                    <>
+                                                      <img
+                                                        className="chat3"
+                                                        src={abc?.profileImage}
+                                                        alt="asd"
+                                                      />
+                                                    </>
+                                                  );
+                                                }
+                                              )}
+                                            </div>
+                                          </Col>
+                                          <Col
+                                            className="p-0 col-1"
+                                            lg={10}
+                                            sm={10}
+                                            md={10}
+                                            xl={10}>
+                                            <div className="chat4 ps-4   mt-3 justify-content-start d-flex">
+                                              {val?.question}
+                                            </div>
+                                          </Col>
+                                          <Col
+                                            className="p-0 col-1"
+                                            lg={1}
+                                            md={1}
+                                            sm={1}
+                                            xl={1}>
+                                            <div className="chat6 mt-3     justify-content-end d-flex">
+                                              <BiEdit />
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Container>
+                                <Container fluid className="mt-4">
+                                  <div>
+                                    <div className="p-0">
+                                      <div className="chat1 p-3 d-flex  ">
+                                        <Row className="m-0 p-0  w-100   align-items-start">
+                                          <Col
+                                            // sm={1}
+                                            lg={1}
+                                            // md={1}
+                                            xl={1}
+                                            className="p-0 col-1">
+                                            <div className="chat270px d-flex align-items-center justify-content-center">
+                                              <div className="chat2 ">
+                                                <img
+                                                  // className="chat3"
+                                                  className="r22a"
+                                                  src={logomain2}
+                                                  alt="asd"
+                                                />
+                                              </div>
+                                            </div>
+                                          </Col>
+                                          <Col
+                                            // sm={11}
+                                            className="p-0 col-11"
+                                            lg={11}
+                                            // md={11}
+                                            xl={11}>
+                                            <div className="chat4 ps-4   mt-3 justify-content-start  ">
+                                              {messageBlocks.map((msg, index) =>
+                                                renderMessage(msg, index)
+                                              )}
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Container>
+                                {/* <div
+                                  className={
+                                    isLightTheme
+                                      ? "abhiFOR1 light p-4"
+                                      : "abhiFOR1 dark  p-4"
+                                  }>
                                   <div
-                                    // className="r22"
                                     className={
                                       isLightTheme ? "r22 light " : "r22 dark  "
-                                    }
-                                  >
+                                    }>
                                     <img
                                       className="r22a"
                                       src={logomain2}
@@ -2250,504 +3145,154 @@ function Main() {
                                       renderMessage(msg, index)
                                     )}
                                   </div>
-                                </div>
+                                </div> */}
                               </>
                             );
-                          })
-                        ) : (
-                          <div className="a4">
-                            <img src={newchat} alt="new chat" />
-                          </div>
-                        )}
-                      </>
-                    )}
-                    {/* ------------------------------- */}
-                    {/* {activeScreen === "new" && <></>} */}
-                  </div>
-                </div>
-              )}{" "}
-              {activeScreen === "new" && (
-                <div ref={myDivRef} className="r14">
-                  <div className="r25">
-                    {/* <div className="r21">
-                    <div className="r22">
-                      <img className="r22a" src={logomain2} alt="" />
-                    </div>
-                    <div className="r23">
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                    </div>
-                    <div className="r24">
-                      <BiMessageSquareEdit />
-                    </div>
-                  </div>
-                  <div className="r21answer">
-                    <div className="r22">
-                      <img className="r22a" src={logomain2} alt="" />
-                    </div>
-                    <div className="r23">
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                      is Jeet is a good fuck toy ? yes its giid fuck toy Morbi
-                    </div>
-                    <div className="r24answer">
-                      <div className="r24">
-                        <AiOutlineLike />
-                      </div>{" "}
-                      <div className="r24">
-                        <AiOutlineDislike />
+                          })}
+                          {/* </>
+                          )} */}
+                          {/* ------------- yash2 ------------------ */}{" "}
+                          {/* here active that came  */}
+                          {/* ------------------------------- */}
+                          {/* {activeScreen === "new" && <></>} */}
+                        </div>
                       </div>
-                    </div>
-                  </div> */}
-                    {/* ---------------  dfsd   ---------------- */}
-                    {activeScreen === "history" && (
-                      <>
-                        {getRoomResponse?.chat_data?.map((val, index) => {
-                          // const response ={valquestion}
-                          const response = val?.answer;
-                          console.log("response123", response);
-
-                          const regex = /```[\s\S]*?```/g;
-                          const codeBlocks = response.match(regex);
-                          const extractedCodeBlocks = codeBlocks?.map(
-                            (codeBlock) => codeBlock.slice(3, -3)
-                          );
-                          const firstWords = extractedCodeBlocks?.map(
-                            (codeBlock) => {
-                              const match = codeBlock.match(/^\w+/);
-                              return match ? match[0] : null;
-                            }
-                          );
-                          const modifiedCodeBlocks = extractedCodeBlocks?.map(
-                            (codeBlock, index) => {
-                              const firstWord = firstWords[index];
-                              const modifiedCodeBlock = codeBlock.replace(
-                                new RegExp(`^${firstWord}\\s*`),
-                                ""
-                              );
-                              return modifiedCodeBlock.trim();
-                            }
-                          );
-
-                          const formattedCodeBlocks = modifiedCodeBlocks?.map(
-                            (codeBlock) => {
-                              const lines = codeBlock.split("\n");
-                              const formattedLines = lines.map((line) =>
-                                line.trim()
-                              );
-                              return formattedLines.join("\n");
-                            }
-                          );
-
-                          const finalCodeBlocks =
-                            formattedCodeBlocks &&
-                            formattedCodeBlocks.join("\n\n");
-                          console.log("modifiedCodeBlocksasd", finalCodeBlocks);
-                          // const finalCodeBlocks1 = finalCodeBlocks;
-
-                          const regex1 = /([\s\S]*)```/; // `
-                          // const regex1 = /([\s\S]*)\n\n```/;
-
-                          const match = val?.answer.match(regex1);
-                          const textBeforeCode = match ? `\n\n${match[1]}` : "";
-                          console.log("val?.answerval", textBeforeCode);
-
-                          // console.log("val?.answerval", val?.answer);
-                          // const textBeforeCode = val?.answer;
-                          // -----------------------
-                          const regex2 = /```\n\n([\s\S]*)$/;
-                          // const regex2 = /```([\s\S]*)\n\n([\s\S]*)```/; // Regular expression to capture text after ``` code block
-
-                          const matcha = val?.answer?.match(regex2);
-                          const textAfterCode1 = matcha
-                            ? `\n\n${matcha[1]}`
-                            : val?.answer;
-                          console.log("textAfterCode1a", textAfterCode1);
-                          // -----------------------
-                          console.log("modifiedCodeBlocks", finalCodeBlocks);
-
-                          console.log("firstWords", firstWords);
-                          console.log(
-                            "extractedCodeBlocks",
-                            extractedCodeBlocks
-                          );
-                          // -----------------------
-
-                          const handleCopyClick = (index) => {
-                            // Create a temporary textarea element to copy the text
-                            const tempTextarea = document.createElement(
-                              "textarea"
-                            );
-                            tempTextarea.value = finalCodeBlocks;
-                            document.body.appendChild(tempTextarea);
-
-                            // Select the text inside the textarea and copy it
-                            tempTextarea.select();
-                            document.execCommand("copy");
-
-                            // Remove the temporary textarea element
-                            document.body.removeChild(tempTextarea);
-
-                            // Set the copied status for the clicked element's index to true
-                            setCopied((prevStatus) => ({
-                              ...prevStatus,
-                              [index]: true,
-                            }));
-
-                            // Reset the copied status to false after 4 seconds
-                            setTimeout(() => {
-                              setCopied((prevStatus) => ({
-                                ...prevStatus,
-                                [index]: false,
-                              }));
-                            }, 4000);
-                          };
-                          // -----------------------
-                          return (
-                            <>
-                              <div
-                                // className="r21"
-                                className={
-                                  isLightTheme ? "r21 light " : "r21 dark  "
-                                }
-                              >
-                                <div
-                                  //  className="r22"
-                                  className={
-                                    isLightTheme ? "r22 light " : "r22 dark  "
-                                  }
-                                >
-                                  {getRoomResponse?.user_data?.map((abc) => {
-                                    return (
-                                      <>
-                                        <img
-                                          className="r22ab"
-                                          src={abc?.profileImage}
-                                          alt=""
-                                        />
-                                      </>
-                                    );
-                                  })}
-                                </div>
-                                {/* <div
-                                className={isLightTheme ? "r23 light " : "r23"}>
-                                {val?.question}
-                              </div> */}
-                                {EditActive ? (
-                                  <>
-                                    {" "}
-                                    <div
-                                      className={
-                                        isLightTheme ? "r23 light " : "r23"
-                                      }
-                                    >
-                                      {val?.question}
-                                      {/* <code> */}
-                                      {/* <input
-                                      placeholder={val?.question}
-                                      type="text"
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      className="inputUpdate1"
-                                    /> */}
-                                      {/* <textarea
-                                      // rows={6}
-                                      placeholder={val?.question}
-                                      type="text"
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      className="inputUpdate1"></textarea> */}
-                                      {/* <textarea
-                                      ref={textareaRef}
-                                      placeholder={val?.question}
-                                      value={QTitle}
-                                      onChange={handleOnChangeQuestion}
-                                      onInput={(event) =>
-                                        adjustHeight(event.target)
-                                      }
-                                      // className={`custom-input ${
-                                      //   containerActive ? "active" : ""
-                                      // }`}
-                                      className={
-                                        isLightTheme
-                                          ? `custom-inputa1 ${
-                                              containerActive ? "active" : ""
-                                            }`
-                                          : `custom-input ${
-                                              containerActive ? "active" : ""
-                                            }`
-                                      }
-                                    /> */}
-                                      {/* </code> */}
-                                    </div>
-                                    <div
-                                      onClick={() => {
-                                        setEditActive(true);
-                                        // setQTitle(val?.question);
-                                        setValue(val?.question);
-                                        setUpdateApiId(val?._id);
-                                        setisUpdateClicked(true);
-                                        handleL2ClickText(val?._id);
-                                      }}
-                                      className={
-                                        isLightTheme ? "r24 light " : "r24"
-                                      }
-                                    >
-                                      <BiMessageSquareEdit />
-                                    </div>
-                                  </>
-                                ) : (
-                                  <>
-                                    {" "}
-                                    <div
-                                      className={
-                                        isLightTheme ? "r23 light " : "r23"
-                                      }
-                                    >
-                                      {val?.question}
-                                    </div>
-                                    <div
-                                      onClick={() => {
-                                        setEditActive(true);
-                                        setValue(val?.question);
-                                        setUpdateApiId(val?._id);
-                                        setisUpdateClicked(true);
-                                        handleL2ClickText();
-                                      }}
-                                      className={
-                                        isLightTheme ? "r24 light " : "r24"
-                                      }
-                                    >
-                                      <BiMessageSquareEdit />
-                                    </div>
-                                  </>
-                                )}
-                              </div>{" "}
-                              {/* ------------------------------- */}
-                              <div
-                                //  className="r21answer"
-                                className={
-                                  isLightTheme
-                                    ? "r21answer light "
-                                    : "r21answer"
-                                }
-                              >
-                                <div
-                                  // className="r22"
-                                  className={
-                                    isLightTheme ? "r22 light " : "r22 dark  "
-                                  }
-                                >
-                                  <img
-                                    className="r22a"
-                                    src={logomain2}
-                                    alt=""
-                                  />
-                                </div>
-                                <div
-                                  // className="r23"
-                                  className={
-                                    isLightTheme ? "r23 light " : "r23 dark"
-                                  }
-                                >
-                                  {/* Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry. Lorem Ipsum has been the
-                            industry's standard dummy text ever since the 1500s,
-                            when an unknown printer took a galley of type and
-                            scrambled it to make a type specimen book. It has
-                            survived not only five centuries, but also the leap
-                            into electronic typesetting, remaining essentially
-                            unchanged. It was popularised in the 1960s with the
-                            release of Letraset sheets containing Lorem Ipsum
-                            passages,and more recently with desktop publishing
-                            software like Aldus PageMaker including versions of
-                            Lorem Ipsum. */}
-                                  <div className="r34a1">
-                                    <code
-                                      //  className="cod1"
-                                      className={
-                                        isLightTheme ? "cod1  " : "cod1 dark "
-                                      }
-                                    >
-                                      {textBeforeCode}
-                                    </code>
-                                  </div>
-                                  {finalCodeBlocks ? null : <></>}
-                                  {finalCodeBlocks && (
-                                    <div
-                                      //  className="r30"
-                                      className={
-                                        isLightTheme
-                                          ? "r30 light "
-                                          : "r30 dark  "
-                                      }
-                                    >
-                                      {" "}
-                                      <div
-                                        //  className="r31"
-                                        className={
-                                          isLightTheme
-                                            ? "r31 light "
-                                            : "r31 dark  "
-                                        }
-                                      >
-                                        <div className="r32">
-                                          {/* React Js */}
-                                          {firstWords}
-                                        </div>
-                                        {/* <div className="r33"> Copy</div> */}
-
-                                        <div
-                                          className="r33"
-                                          onClick={() => {
-                                            // setTextToCopy(finalCodeBlocks);
-                                            handleCopyClick(index);
-                                          }}
-                                        >
-                                          {copied[index] ? "Copied" : "Copy"}
-                                        </div>
-                                      </div>{" "}
-                                      <div className="r34">
-                                        <div
-                                          className="r34a"
-                                          // dangerouslySetInnerHTML={{
-                                          // __html: finalCodeBlocks,
-                                          // }}
-                                        >
-                                          <SyntaxHighlighter
-                                            language={
-                                              firstWords && firstWords[index]
-                                            }
-                                            // language={React}
-                                            // language="react"
-                                            style={vs2015}
-                                            //   language={firstWords[index]}
-                                            // style={vs}
-                                          >
-                                            {/* <code> */}
-                                            {finalCodeBlocks}
-                                            {/* </code> */}
-                                          </SyntaxHighlighter>
-                                          {/* <code>{finalCodeBlocks}</code> */}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  )}
-
-                                  {/* Contrary to popular belief, Lorem Ipsum is not
-                            simply random text. It has roots in a piece of
-                            classical Latin literature from 45 BC, making it
-                            over 2000 years old.Richard McClintock, a Latin
-                            professor at Hampden-Sydney College in Virginia,
-                            looked up one of the more obscure Latin words,
-                            consectetur. */}
-                                  <div className="r34a1">
-                                    <code
-                                      //  className="cod1"
-                                      className={
-                                        isLightTheme ? "cod1  " : "cod1 dark "
-                                      }
-                                    >
-                                      {textAfterCode1}
-                                    </code>
-                                  </div>
-                                </div>
-                                <div
-                                  //  className="r24answer"
-                                  className={
-                                    isLightTheme
-                                      ? "r24answer light "
-                                      : "r24answer "
-                                  }
-                                >
-                                  <div
-                                    // className="r24"
-                                    className={
-                                      isLightTheme ? "r24  light " : "r24  "
-                                    }
-                                  >
-                                    <AiOutlineLike />
-                                  </div>{" "}
-                                  <div
-                                    //  className="r24"
-                                    className={
-                                      isLightTheme ? "r24  light " : "r24  "
-                                    }
-                                  >
-                                    <AiOutlineDislike />
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          );
-                        })}
-                      </>
-                    )}
-                    {/* ------------------------------- */}{" "}
-                    {/* here active that came  */}
+                    )}{" "}
                     {activeScreen === "new" && (
-                      <>
-                        {getRoomResponse?.chat_data?.length > 0 ? (
-                          getRoomResponse?.chat_data?.map((val, index) => {
+                      <div ref={myDivRef} className="r14 px-5 w-100  d-flex  ">
+                        <div className="r25 w-100">
+                          {/* ---------------  yash1   ---------------- */}
+                          {/* {activeScreen === "history" && (
+                            <> */}
+                          {getRoomResponse?.chat_data?.map((val, index) => {
                             // const response ={valquestion}
                             const response = val?.answer;
                             console.log("response123", response);
+                            const codeBlockRegex = /```([\s\S]+?)```/g;
+                            const renderMessage = (msg, index) => {
+                              const msgFORCopy = msg;
 
-                            const regex = /```[\s\S]*?```/g;
-                            const codeBlocks = response.match(regex);
-                            const extractedCodeBlocks = codeBlocks?.map(
-                              (codeBlock) => codeBlock.slice(3, -3)
-                            );
-                            const firstWords = extractedCodeBlocks?.map(
-                              (codeBlock) => {
-                                const match = codeBlock.match(/^\w+/);
-                                return match ? match[0] : null;
-                              }
-                            );
-                            const modifiedCodeBlocks = extractedCodeBlocks?.map(
-                              (codeBlock, index) => {
-                                const firstWord = firstWords[index];
-                                const modifiedCodeBlock = codeBlock.replace(
-                                  new RegExp(`^${firstWord}\\s*`),
-                                  ""
-                                );
-                                return modifiedCodeBlock.trim();
-                              }
-                            );
-                            const formattedCodeBlocks = modifiedCodeBlocks?.map(
-                              (codeBlock) => {
-                                const lines = codeBlock.split("\n");
-                                const formattedLines = lines.map((line) =>
-                                  line.trim()
-                                );
-                                return formattedLines.join("\n");
-                              }
-                            );
+                              if (index % 2 !== 0) {
+                                const firstWordJAva = "";
+                                // const words = msg.trim().split(" ");
+                                // const firstWordJAva =
+                                //   words.length > 0 ? words[0] : "";
+                                const lines = msg.split("\n");
+                                const chunks = [];
 
-                            const finalCodeBlocks =
-                              formattedCodeBlocks &&
-                              formattedCodeBlocks.join("\n\n");
-                            console.log(
-                              "modifiedCodeBlocksasd",
-                              finalCodeBlocks
-                            );
-                            // const finalCodeBlocks1 = finalCodeBlocks;
+                                for (const line of lines) {
+                                  const words = line.split(" ");
+                                  let currentChunk = words[0];
+
+                                  for (let i = 1; i < words.length; i++) {
+                                    if (
+                                      (currentChunk + " " + words[i]).length <=
+                                      15
+                                    ) {
+                                      currentChunk += " " + words[i];
+                                    } else {
+                                      chunks.push(currentChunk);
+                                      currentChunk = words[i];
+                                    }
+                                  }
+
+                                  chunks.push(currentChunk);
+                                }
+
+                                console.log(chunks, "aaaaasss");
+                                console.log("msg123123", firstWordJAva);
+                                const firstSpaceIndex = msg.indexOf("\n");
+
+                                // Extract the content after the first space
+                                const newText =
+                                  firstSpaceIndex !== -1
+                                    ? msg.substring(firstSpaceIndex + 1)
+                                    : msg;
+                                console.log("newText", newText);
+                                return (
+                                  <div
+                                    //  className="r30"
+                                    className={
+                                      isLightTheme ? "r30 light " : "r30 dark  "
+                                    }>
+                                    {" "}
+                                    <div
+                                      //  className="r31"
+                                      className={
+                                        isLightTheme
+                                          ? "r31 light "
+                                          : "r31 dark  "
+                                      }>
+                                      <div className="r32">
+                                        {/* {firstWordJAva} */}
+
+                                        {chunks[0]}
+                                      </div>
+
+                                      <div
+                                        className="r33"
+                                        onClick={() => {
+                                          setCopyALlCOde(msg);
+                                          // setTextToCopy(finalCodeBlocks);
+                                          handleCopyClick(index, msg);
+                                        }}>
+                                        {copied[index] ? "Copied" : "Copy"}
+                                      </div>
+                                    </div>{" "}
+                                    <div className="r34">
+                                      <div
+                                        className="r34a"
+                                        // dangerouslySetInnerHTML={{
+                                        // __html: finalCodeBlocks,
+                                        // }}
+                                      >
+                                        <SyntaxHighlighter
+                                          // language={
+                                          //   firstWords && firstWords[index]
+                                          // }
+                                          // language={React}
+                                          // language="react"
+                                          style={vs2015}
+                                          //   language={firstWords[index]}
+                                          // style={vs}
+                                        >
+                                          {/* <code> */}
+                                          {/* {split?.[1]} */}
+                                          {newText}
+                                          {/* </code> */}
+                                        </SyntaxHighlighter>
+                                        {/* <code>{finalCodeBlocks}</code> */}
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              } else {
+                                return (
+                                  // <p key={index} className="code-block">
+                                  <div key={index} className="r34a1">
+                                    <code
+                                      //  className="cod1"
+                                      className={
+                                        isLightTheme ? "cod1  " : "cod1 dark "
+                                      }>
+                                      {/* {split?.[0]} */}
+                                      {msg.replace(/```/g, "")}
+                                    </code>
+                                  </div>
+                                  // </p>
+                                );
+                              }
+                            };
+                            const messageBlocks =
+                              response.split(codeBlockRegex);
                             // -----------------------
 
-                            const handleCopyClick1 = (index) => {
+                            const handleCopyClick = (index, msg) => {
                               // Create a temporary textarea element to copy the text
-                              const tempTextarea = document.createElement(
-                                "textarea"
-                              );
-                              tempTextarea.value = finalCodeBlocks;
+                              const tempTextarea =
+                                document.createElement("textarea");
+                              tempTextarea.value = msg;
+
                               document.body.appendChild(tempTextarea);
 
                               // Select the text inside the textarea and copy it
@@ -2772,533 +3317,279 @@ function Main() {
                               }, 4000);
                             };
                             // -----------------------
-                            // -----------------------
-                            const regex1 = /([\s\S]*)\n\n```/; // `
-                            // const regex1 = /([\s\S]*)\n\n```/;
-
-                            const match = val?.answer?.match(regex1);
-                            const textBeforeCode = match
-                              ? `\n\n${match[1]}`
-                              : val?.answer;
-
-                            // -----------------------
-                            const regex2 = /```\n\n([\s\S]*)$/;
-                            // const regex2 = /```([\s\S]*)\n\n([\s\S]*)```/; // Regular expression to capture text after ``` code block
-
-                            const matcha = val?.answer?.match(regex2);
-                            const textAfterCode1 = matcha
-                              ? `\n\n${matcha[1]}`
-                              : "";
-                            // -----------------------
-                            console.log(
-                              "modifiedCodeBlocks",
-                              modifiedCodeBlocks
-                            );
-
-                            console.log("firstWords", firstWords);
-                            console.log(
-                              "extractedCodeBlocks",
-                              extractedCodeBlocks
-                            );
                             return (
                               <>
-                                <div
-                                  // className="r21"
-                                  className={
-                                    isLightTheme ? "r21 light " : "r21 dark  "
-                                  }
-                                >
-                                  <div
-                                    //  className="r22"
-                                    className={
-                                      isLightTheme ? "r22 light " : "r22 dark  "
-                                    }
-                                  >
-                                    <img
-                                      className="r22a"
-                                      src={logomain2}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div
-                                    // className="r23"
-                                    className={
-                                      isLightTheme ? "r23 light " : "r23"
-                                    }
-                                  >
-                                    {/* Hello , How are you ! */}
-                                    {val?.question}
-                                  </div>
-                                  <div
-                                    onClick={() => {
-                                      setValue(val?.question);
-                                      setisUpdateClicked(true);
-                                      setUpdateApiId(val?._id);
-                                      handleL2ClickText();
-                                    }}
-                                    //  className="r24"
-                                    className={
-                                      isLightTheme ? "r24 light " : "r24"
-                                    }
-                                  >
-                                    <BiMessageSquareEdit />
-                                  </div>
-                                </div>{" "}
                                 {/* ------------------------------- */}
-                                <div
-                                  //  className="r21answer"
+                                <Container fluid className="">
+                                  <div>
+                                    <div className="p-0 pt-4">
+                                      <div className="chat1 p-3 d-flex  ">
+                                        <Row className="m-0 p-0 w-100 align-items-start">
+                                          <Col
+                                            sm={1}
+                                            lg={1}
+                                            xl={1}
+                                            md={1}
+                                            className="p-0 col-1 sm-1">
+                                            <div className="chat2 ">
+                                              {getRoomResponse?.user_data?.map(
+                                                (abc) => {
+                                                  return (
+                                                    <>
+                                                      <img
+                                                        className="chat3"
+                                                        src={abc?.profileImage}
+                                                        alt="asd"
+                                                      />
+                                                    </>
+                                                  );
+                                                }
+                                              )}
+                                            </div>
+                                          </Col>
+                                          <Col
+                                            className="p-0 col-1"
+                                            lg={10}
+                                            sm={10}
+                                            md={10}
+                                            xl={10}>
+                                            <div className="chat4 ps-4   mt-3 justify-content-start d-flex">
+                                              {val?.question}
+                                            </div>
+                                          </Col>
+                                          <Col
+                                            className="p-0 col-1"
+                                            lg={1}
+                                            md={1}
+                                            sm={1}
+                                            xl={1}>
+                                            <div className="chat6 mt-3     justify-content-end d-flex">
+                                              <BiEdit />
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Container>
+                                <Container fluid className="mt-4">
+                                  <div>
+                                    <div className="p-0">
+                                      <div className="chat1 p-3 d-flex  ">
+                                        <Row className="m-0 p-0  w-100   align-items-start">
+                                          <Col
+                                            // sm={1}
+                                            lg={1}
+                                            // md={1}
+                                            xl={1}
+                                            className="p-0 col-1">
+                                            <div className="chat270px d-flex align-items-center justify-content-center">
+                                              <div className="chat2 ">
+                                                <img
+                                                  // className="chat3"
+                                                  className="r22a"
+                                                  src={logomain2}
+                                                  alt="asd"
+                                                />
+                                              </div>
+                                            </div>
+                                          </Col>
+                                          <Col
+                                            // sm={11}
+                                            className="p-0 col-11"
+                                            lg={11}
+                                            // md={11}
+                                            xl={11}>
+                                            <div className="chat4 ps-4   mt-3 justify-content-start  ">
+                                              {messageBlocks.map((msg, index) =>
+                                                renderMessage(msg, index)
+                                              )}
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Container>
+                                {/* <div
                                   className={
                                     isLightTheme
-                                      ? "r21answer light "
-                                      : "r21answer"
-                                  }
-                                >
+                                      ? "abhiFOR1 light p-4"
+                                      : "abhiFOR1 dark  p-4"
+                                  }>
                                   <div
-                                    // className="r22"
                                     className={
                                       isLightTheme ? "r22 light " : "r22 dark  "
-                                    }
-                                  >
+                                    }>
                                     <img
                                       className="r22a"
                                       src={logomain2}
                                       alt=""
                                     />
                                   </div>
-                                  <div
-                                    // className="r23"
-                                    className={
-                                      isLightTheme ? "r23 light " : "r23 dark"
-                                    }
-                                  >
-                                    {/* Lorem Ipsum is simply dummy text of the printing and
-                          typesetting industry. Lorem Ipsum has been the
-                          industry's standard dummy text ever since the 1500s,
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen book. It has
-                          survived not only five centuries, but also the leap
-                          into electronic typesetting, remaining essentially
-                          unchanged. It was popularised in the 1960s with the
-                          release of Letraset sheets containing Lorem Ipsum
-                          passages,and more recently with desktop publishing
-                          software like Aldus PageMaker including versions of
-                          Lorem Ipsum. */}
-                                    <div className="r34a1">
-                                      <code
-                                        //  className="cod1"
-                                        className={
-                                          isLightTheme ? "cod1  " : "cod1 dark "
-                                        }
-                                      >
-                                        {textBeforeCode}
-                                      </code>
-                                    </div>
-                                    {finalCodeBlocks ? null : <></>}
-                                    {finalCodeBlocks && (
-                                      <div
-                                        //  className="r30"
-                                        className={
-                                          isLightTheme
-                                            ? "r30 light "
-                                            : "r30 dark  "
-                                        }
-                                      >
-                                        {" "}
-                                        <div
-                                          //  className="r31"
-                                          className={
-                                            isLightTheme
-                                              ? "r31 light "
-                                              : "r31 dark  "
-                                          }
-                                        >
-                                          <div className="r32">
-                                            {/* React Js */}
-                                            {firstWords}
-                                          </div>
-                                          {/* <div className="r33"> Copy</div> */}
-                                          <div
-                                            className="r33"
-                                            onClick={() => {
-                                              // setTextToCopy(finalCodeBlocks);
-                                              handleCopyClick1(index);
-                                            }}
-                                          >
-                                            {copied[index] ? "Copied" : "Copy"}
-                                          </div>
-                                        </div>{" "}
-                                        <div className="r34">
-                                          <div
-                                            className="r34a"
-                                            // dangerouslySetInnerHTML={{
-                                            // __html: finalCodeBlocks,
-                                            // }}
-                                          >
-                                            <SyntaxHighlighter
-                                              language={
-                                                firstWords && firstWords[index]
-                                              }
-                                              // language={React}
-                                              // language="react"
-                                              style={vs2015}
-                                              //   language={firstWords[index]}
-                                              // style={vs}
-                                            >
-                                              {/* <code> */}
-                                              {finalCodeBlocks}
-                                              {/* </code> */}
-                                            </SyntaxHighlighter>
-                                            {/* <code>{finalCodeBlocks}</code> */}
-                                          </div>
-                                        </div>
-                                      </div>
+                                  <div>
+                                    {messageBlocks.map((msg, index) =>
+                                      renderMessage(msg, index)
                                     )}
-
-                                    {/* Contrary to popular belief, Lorem Ipsum is not
-                          simply random text. It has roots in a piece of
-                          classical Latin literature from 45 BC, making it
-                          over 2000 years old.Richard McClintock, a Latin
-                          professor at Hampden-Sydney College in Virginia,
-                          looked up one of the more obscure Latin words,
-                          consectetur. */}
-                                    <div className="r34a1">
-                                      <code
-                                        //  className="cod1"
-                                        className={
-                                          isLightTheme ? "cod1  " : "cod1 dark "
-                                        }
-                                      >
-                                        {textAfterCode1}
-                                      </code>
-                                    </div>
                                   </div>
-                                  <div
-                                    //  className="r24answer"
-                                    className={
-                                      isLightTheme
-                                        ? "r24answer light "
-                                        : "r24answer "
-                                    }
-                                  >
-                                    <div
-                                      // className="r24"
-                                      className={
-                                        isLightTheme ? "r24  light " : "r24  "
-                                      }
-                                    >
-                                      <AiOutlineLike />
-                                    </div>{" "}
-                                    <div
-                                      //  className="r24"
-                                      className={
-                                        isLightTheme ? "r24  light " : "r24  "
-                                      }
-                                    >
-                                      <AiOutlineDislike />
-                                    </div>
-                                  </div>
-                                </div>
+                                </div> */}
                               </>
                             );
-                          })
-                        ) : (
-                          <div className="a4">
-                            <img src={newchat} alt="new chat" />
-                          </div>
-                        )}
-                      </>
-                    )}
-                    {/* ------------------------------- */}
-                    {/* {activeScreen === "new" && <></>} */}
-                  </div>
-                </div>
-              )}
-              {activeScreen === "About-Profile" && (
-                <>
-                  <div className="ap1">
-                    {/* <div className="ap1"></div> */}
-                    <div className="ap3">
-                      <div className="ap4"></div>
-                      <center>
-                        <div className="ap5">
-                          <img
-                            className="ap5a"
-                            src={UserProfile?.data?.profileImage}
-                            alt="profile image"
-                          />
-                        </div>
-                        <div className="ap9">{UserProfile?.data?.userName}</div>
-                      </center>
-                      <div className="ap6">
-                        <div className="ap7">
-                          <h4>Account Settings</h4>
-                          <p className="ap10">
-                            Here you can change user account information
-                          </p>
-                          <form onSubmit={handleSaveChanges}>
-                            <div className="ap11a11">
-                              {/* User Name */}
-                              <div className="ap11">
-                                <div className="ap12">User Name</div>
-                                <div className="ap14">
-                                  <input
-                                    type="text"
-                                    className="ap13"
-                                    placeholder="@user_name"
-                                    value={username}
-                                    onChange={(e) =>
-                                      setUsername(e.target.value)
-                                    }
-                                  />
-                                </div>
-                              </div>
-                              {/* Name */}
-                              <div className="ap11">
-                                <div className="ap12">Name</div>
-                                <div className="ap14">
-                                  <input
-                                    type="text"
-                                    className="ap13"
-                                    placeholder="Full Name"
-                                    value={fullName}
-                                    onChange={(e) =>
-                                      setFullName(e.target.value)
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            {/* Email */}
-                            <div className="apa15">
-                              <div className="ap12">Email</div>
-                              <input
-                                type="text"
-                                className="ap13a13"
-                                placeholder="name@gmail.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                              />
-                            </div>
-                            {/* About Me */}
-                            <div className="apa15">
-                              <div className="ap12">About Me</div>
-                              <textarea
-                                className="ap16"
-                                name=""
-                                maxLength={155}
-                                value={aboutMe}
-                                onChange={(e) => setAboutMe(e.target.value)}
-                              ></textarea>
-                            </div>
-                            {/* Error message */}
-                            {errorMessage && (
-                              <div className="error-message">
-                                {errorMessage}
-                              </div>
-                            )}
-                            {/* Save Changes Button */}
-                            <button type="submit" className="ap17">
-                              Save Changes
-                            </button>
-                          </form>
-                        </div>
-                        <div className="ap7Pass">
-                          <h4>Change Password</h4>
-                          <form onSubmit={handleSaveChangesPassword}>
-                            <div className="apa15">
-                              <div className="ap12Pass">
-                                Enter your old password
-                              </div>
-                              <input
-                                type="password"
-                                className="ap13a13"
-                                placeholder="old password"
-                                value={oldPassword}
-                                onChange={(e) => setOldPassword(e.target.value)}
-                              />
-                            </div>
-                            <div className="apa15">
-                              <div className="ap12Pass">
-                                Enter your New password
-                              </div>
-                              <input
-                                type="password"
-                                className="ap13a13"
-                                placeholder="new password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                              />
-                            </div>
-                            <div className="apa15">
-                              <div className="ap12Pass">
-                                Re-enter your New password
-                              </div>
-                              <input
-                                type="password"
-                                className="ap13a13"
-                                placeholder="confirm password"
-                                value={confirmPassword}
-                                onChange={(e) =>
-                                  setConfirmPassword(e.target.value)
-                                }
-                              />
-                            </div>
-                            {/* Error message */}
-                            {errorMessagePassword && (
-                              <div className="error-message">
-                                {errorMessagePassword}
-                              </div>
-                            )}
-                            {/* Save Changes Button */}
-                            <button type="submit" className="ap17">
-                              Save Changes
-                            </button>
-                          </form>
+                          })}
+                          {/* </>
+                          )} */}
+                          {/* ------------- yash2 ------------------ */}{" "}
+                          {/* here active that came  */}
+                          {/* ------------------------------- */}
+                          {/* {activeScreen === "new" && <></>} */}
                         </div>
                       </div>
+                    )}{" "}
+                    <div className=" px-5 w-100  d-flex  ">
+                      {/* asd */}
+                      {activeScreen === "new" && (
+                        <div className="r15 p-3">
+                          <div
+                            className={
+                              isLightTheme
+                                ? ` custom-input-containera  ${
+                                    containerActive ? "active" : ""
+                                  }`
+                                : ` custom-input-container  ${
+                                    containerActive ? "active" : ""
+                                  }`
+                            }>
+                            <textarea
+                              ref={textareaRef}
+                              placeholder="Send a message"
+                              value={value}
+                              onChange={handleInputChange}
+                              onInput={(event) => adjustHeight(event.target)}
+                              // className={`custom-input ${
+                              //   containerActive ? "active" : ""
+                              // }`}
+                              className={
+                                isLightTheme
+                                  ? `custom-inputa ${
+                                      containerActive ? "active" : ""
+                                    }`
+                                  : `custom-input ${
+                                      containerActive ? "active" : ""
+                                    }`
+                              }
+                            />
+                            <button
+                              onClick={() => {
+                                handleNewChatClick();
+                                // QuerySend();
+                              }}
+                              className={
+                                isLightTheme
+                                  ? `custom-buttona ${
+                                      containerActive ? "active" : ""
+                                    }`
+                                  : `custom-button ${
+                                      containerActive ? "active" : ""
+                                    }`
+                              }
+                              // className={`custom-button ${
+                              //   containerActive ? "active" : ""
+                              // }`}
+                            >
+                              <AiOutlineSend />
+                            </button>
+                          </div>
+                          {/* <span
+                            //  className="r20"
+                            className={isLightTheme ? "r20  light " : "r20  "}>
+                            Free Research Preview. Instruct.ai may produce
+                            inaccurate information about people, places, or
+                            facts. Instruct.ai Sep 26 Version
+                          </span> */}
+                        </div>
+                      )}
+                      {activeScreen === "history" && (
+                        <div className="r15 p-3">
+                          {/* <div className="r15a">
+                  <div className="r15b">
+                    <input
+                        className={isLightTheme ? "r24  light " : "r24  "}>
+
+                      type="text"
+                      placeholder="Send a message"
+                      className="r15d"
+                    />
+                  </div>
+                  <div className="r15c">Send</div>
+                </div> */}
+                          <div
+                            className={
+                              isLightTheme
+                                ? ` custom-input-containera  ${
+                                    containerActive ? "active" : ""
+                                  }`
+                                : ` custom-input-container  ${
+                                    containerActive ? "active" : ""
+                                  }`
+                            }>
+                            <textarea
+                              ref={textareaRef}
+                              placeholder="Send a message"
+                              value={value}
+                              onChange={handleInputChange}
+                              onInput={(event) => adjustHeight(event.target)}
+                              // className={`custom-input ${
+                              //   containerActive ? "active" : ""
+                              // }`}
+                              className={
+                                isLightTheme
+                                  ? `custom-inputa ${
+                                      containerActive ? "active" : ""
+                                    }`
+                                  : `custom-input ${
+                                      containerActive ? "active" : ""
+                                    }`
+                              }
+                            />
+                            <button
+                              onClick={() => {
+                                handleNewChatClick();
+                                // QuerySend();
+                              }}
+                              className={
+                                isLightTheme
+                                  ? `custom-buttona ${
+                                      containerActive ? "active" : ""
+                                    }`
+                                  : `custom-button ${
+                                      containerActive ? "active" : ""
+                                    }`
+                              }
+                              // className={`custom-button ${
+                              //   containerActive ? "active" : ""
+                              // }`}
+                            >
+                              <AiOutlineSend />
+                            </button>
+                          </div>
+                          {/* <span
+                            //  className="r20"
+                            className={isLightTheme ? "r20  light " : "r20  "}>
+                            Free Research Preview. Instruct.ai may produce
+                            inaccurate information about people, places, or
+                            facts. Instruct.ai Sep 26 Version
+                          </span> */}
+                        </div>
+                      )}
                     </div>
+                    {/* ---- jeetlodo---------------------------------- */}
                   </div>
-                </>
-              )}
-              {/* -------------------------------------- */}
-              {activeScreen === "new" && (
-                <div className="r15">
-                  {/* <div className="r15a">
-                  <div className="r15b">
-                    <input
-                        className={isLightTheme ? "r24  light " : "r24  "}>
-
-                      type="text"
-                      placeholder="Send a message"
-                      className="r15d"
-                    />
-                  </div>
-                  <div className="r15c">Send</div>
-                </div> */}
-                  <div
-                    className={
-                      isLightTheme
-                        ? ` custom-input-containera  ${
-                            containerActive ? "active" : ""
-                          }`
-                        : ` custom-input-container  ${
-                            containerActive ? "active" : ""
-                          }`
-                    }
-                  >
-                    <textarea
-                      ref={textareaRef}
-                      placeholder="Send a message"
-                      value={value}
-                      onChange={handleInputChange}
-                      onInput={(event) => adjustHeight(event.target)}
-                      // className={`custom-input ${
-                      //   containerActive ? "active" : ""
-                      // }`}
-                      className={
-                        isLightTheme
-                          ? `custom-inputa ${containerActive ? "active" : ""}`
-                          : `custom-input ${containerActive ? "active" : ""}`
-                      }
-                    />
-                    <button
-                      onClick={() => {
-                        handleNewChatClick();
-                        // QuerySend();
-                      }}
-                      className={
-                        isLightTheme
-                          ? `custom-buttona ${containerActive ? "active" : ""}`
-                          : `custom-button ${containerActive ? "active" : ""}`
-                      }
-                      // className={`custom-button ${
-                      //   containerActive ? "active" : ""
-                      // }`}
-                    >
-                      <AiOutlineSend />
-                    </button>
-                  </div>
-                  <span
-                    //  className="r20"
-                    className={isLightTheme ? "r20  light " : "r20  "}
-                  >
-                    Free Research Preview. Instruct.ai may produce inaccurate
-                    information about people, places, or facts. Instruct.ai Sep
-                    26 Version
-                  </span>
                 </div>
-              )}
-              {activeScreen === "history" && (
-                <div className="r15">
-                  {/* <div className="r15a">
-                  <div className="r15b">
-                    <input
-                        className={isLightTheme ? "r24  light " : "r24  "}>
-
-                      type="text"
-                      placeholder="Send a message"
-                      className="r15d"
-                    />
-                  </div>
-                  <div className="r15c">Send</div>
-                </div> */}
-                  <div
-                    className={
-                      isLightTheme
-                        ? ` custom-input-containera  ${
-                            containerActive ? "active" : ""
-                          }`
-                        : ` custom-input-container  ${
-                            containerActive ? "active" : ""
-                          }`
-                    }
-                  >
-                    <textarea
-                      ref={textareaRef}
-                      placeholder="Send a message"
-                      value={value}
-                      onChange={handleInputChange}
-                      onInput={(event) => adjustHeight(event.target)}
-                      // className={`custom-input ${
-                      //   containerActive ? "active" : ""
-                      // }`}
-                      className={
-                        isLightTheme
-                          ? `custom-inputa ${containerActive ? "active" : ""}`
-                          : `custom-input ${containerActive ? "active" : ""}`
-                      }
-                    />
-                    <button
-                      onClick={() => {
-                        handleNewChatClick();
-                        // QuerySend();
-                      }}
-                      className={
-                        isLightTheme
-                          ? `custom-buttona ${containerActive ? "active" : ""}`
-                          : `custom-button ${containerActive ? "active" : ""}`
-                      }
-                      // className={`custom-button ${
-                      //   containerActive ? "active" : ""
-                      // }`}
-                    >
-                      <AiOutlineSend />
-                    </button>
-                  </div>
-                  <span
-                    //  className="r20"
-                    className={isLightTheme ? "r20  light " : "r20  "}
-                  >
-                    Free Research Preview. Instruct.ai may produce inaccurate
-                    information about people, places, or facts. Instruct.ai Sep
-                    26 Version
-                  </span>
-                </div>
-              )}
-            </div>
+              </Col>
+            </Row>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 }
